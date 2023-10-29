@@ -1,3 +1,4 @@
+# Prerequisites
 *.d
 
 # Object files
@@ -49,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#Arquivo para Mac
+.DS_store
