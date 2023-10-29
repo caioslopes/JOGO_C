@@ -10,7 +10,6 @@ int           init(t_sdl *sdl, t_raycaster *rc)
   rc->player_dir_y = INIT_P_DIR_Y;
   rc->player_plane_x = INIT_P_PLANE_X;
   rc->player_plane_y = INIT_P_PLANE_Y;
-  //TESTE
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
     fprintf(stderr,"SDL initialization failed (%s)\n",SDL_GetError());
