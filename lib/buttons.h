@@ -2,8 +2,8 @@
 
 typedef struct ButtonKeys* keys;
 
-void initKeys(keys* key);
+void init_keys(keys* key);
 
-int leTecla(keys key);
+int read_keys(keys key);
 
-void movimenta(keys key, t_raycaster* rc);
+void move_player(keys key, t_raycaster* rc);

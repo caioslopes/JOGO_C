@@ -1,11 +1,30 @@
 #include "raycaster.h"
 #include "buttons.h"
 
+int init(t_sdl *sdl, t_raycaster *rc);
+void initial_calc(t_raycaster *rc, int x);
+void perform_dda(t_raycaster *rc);
+void calc_wall_height(t_raycaster *rc);
+void draw_vert_line(t_sdl *sdl, t_raycaster *rc, int x, keys key);
+void render_frame(t_sdl *sdl);
+void raycaster(t_sdl *sdl, t_raycaster *rc);
 
+int main(){
+  t_sdl       sdl;
+  t_raycaster rc;
 
+  if (init(&sdl, &rc) != 0)
+    return (-1);
+  raycaster(&sdl, &rc);
+  if (sdl.renderer)
+    SDL_DestroyRenderer(sdl.renderer);
+  if (sdl.window)
+    SDL_DestroyWindow(sdl.window);
+  SDL_Quit();
+  return (0);
+}
 
-
-int           init(t_sdl *sdl, t_raycaster *rc)
+int init(t_sdl *sdl, t_raycaster *rc)
 {
   sdl->window = NULL;
   sdl->renderer = NULL;
@@ -28,8 +47,7 @@ int           init(t_sdl *sdl, t_raycaster *rc)
   return (0);
 }
 
-void          initial_calc(t_raycaster *rc, int x)
-{
+void initial_calc(t_raycaster *rc, int x){
   double      camera_x;
 
   camera_x = 2 * x / (double)(WIN_X) - 1;
@@ -61,8 +79,7 @@ void          initial_calc(t_raycaster *rc, int x)
   }
 }
 
-void          perform_dda(t_raycaster *rc)
-{
+void perform_dda(t_raycaster *rc){
   int         hit;
 
   hit = 0;
@@ -85,9 +102,8 @@ void          perform_dda(t_raycaster *rc)
   }
 }
 
-void          calc_wall_height(t_raycaster *rc)
-{
-  int         line_height;
+void calc_wall_height(t_raycaster *rc){
+  int line_height;
 
   if (rc->side == 0)
     rc->perp_wall_dist = (rc->map_x - rc->player_pos_x + (1 - rc->step_x) / 2) / rc->ray_dir_x;
@@ -102,8 +118,7 @@ void          calc_wall_height(t_raycaster *rc)
     rc->draw_end = WIN_Y - 1;
 }
 
-void          draw_vert_line(t_sdl *sdl, t_raycaster *rc, int x, keys key)
-{
+void draw_vert_line(t_sdl *sdl, t_raycaster *rc, int x, keys key){
   SDL_Color   color;
   
   color = apply_night_effect(select_wall_color(rc->map_x, rc->map_y), rc->perp_wall_dist);
@@ -117,26 +132,22 @@ void          draw_vert_line(t_sdl *sdl, t_raycaster *rc, int x, keys key)
   SDL_SetRenderDrawColor(sdl->renderer, color.r, color.g, color.b, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLine(sdl->renderer, x, rc->draw_start, x, rc->draw_end);
 
-  movimenta(key, rc);
+  move_player(key, rc);
   
 
 }
 
-void          render_frame(t_sdl *sdl)
-{
+void render_frame(t_sdl *sdl){
   SDL_RenderPresent(sdl->renderer);
   SDL_SetRenderDrawColor(sdl->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(sdl->renderer);
 }
 
 
-void          raycaster(t_sdl *sdl, t_raycaster *rc)
-{
+void raycaster(t_sdl *sdl, t_raycaster *rc){
   SDL_bool    done;
   keys key;
-  initKeys(&key);
-  //double      oldDirX;
-  //double      oldPlaneX;
+  init_keys(&key);
   done = SDL_FALSE;
   while(!done)
   {
@@ -146,26 +157,9 @@ void          raycaster(t_sdl *sdl, t_raycaster *rc)
       perform_dda(rc);
       calc_wall_height(rc);
       draw_vert_line(sdl, rc, x, key);
-      //movimenta(key, rc);
     }
     render_frame(sdl);
-    if (leTecla(key) != 0)
+    if (read_keys(key) != 0)
       done = SDL_TRUE;
   }
-}
-
-int           main()
-{
-  t_sdl       sdl;
-  t_raycaster rc;
-
-  if (init(&sdl, &rc) != 0)
-    return (-1);
-  raycaster(&sdl, &rc);
-  if (sdl.renderer)
-    SDL_DestroyRenderer(sdl.renderer);
-  if (sdl.window)
-    SDL_DestroyWindow(sdl.window);
-  SDL_Quit();
-  return (0);
 }

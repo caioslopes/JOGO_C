@@ -4,7 +4,7 @@ struct ButtonKeys {
   int w, a, s, d;
 };
 
-void initKeys(keys* key){
+void init_keys(keys* key){
     keys k;
     k = malloc(sizeof(key) * 4);
     k->w = 0;
@@ -15,7 +15,7 @@ void initKeys(keys* key){
     *key = k;
 }
 
-int leTecla(keys key){
+int read_keys(keys key){
     SDL_Event   event;
 
     while (SDL_PollEvent(&event)){
@@ -69,22 +69,25 @@ int leTecla(keys key){
     return (0);
 }
 
-void movimenta(keys key, t_raycaster *rc){
-    double      oldDirX;
-    double      oldPlaneX;
+void move_player(keys key, t_raycaster *rc){
+    double oldDirX;
+    double oldPlaneX;
 
+    
     if(key->w == 1){
-        if(worldMap[(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED)][(int)(rc->player_pos_y)] == 0){ // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
+
+        if(worldMap[(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED)][(int)(rc->player_pos_y)] == 0){ // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa  
 
             rc->player_pos_x += rc->player_dir_x * MV_SPEED; // incrementa a posição do player no eixo X 
 
-            }
+        }
 
-            if(worldMap[(int)(rc->player_pos_x)][(int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)] == 0) { // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
+        if(worldMap[(int)(rc->player_pos_x)][(int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)] == 0) { // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
 
-            rc->player_pos_y += rc->player_dir_y * MV_SPEED;  // incrementa a posição do player no eixo Y
+                rc->player_pos_y += rc->player_dir_y * MV_SPEED;  // incrementa a posição do player no eixo Y
 
-            }
+        }
+
     }
 
     if(key->a == 1){
@@ -97,6 +100,7 @@ void movimenta(keys key, t_raycaster *rc){
     }
 
     if(key->s == 1){
+
         if(worldMap[(int)(rc->player_pos_x - rc->player_dir_x * MV_SPEED)][(int)(rc->player_pos_y)] == 0) {
 
             rc->player_pos_x -= rc->player_dir_x * MV_SPEED;
