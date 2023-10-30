@@ -25,8 +25,8 @@ extern int worldMap[mapWidth][mapHeight];
 #define INIT_P_DIR_Y    0
 #define INIT_P_PLANE_X  0
 #define INIT_P_PLANE_Y  0.66
-#define MV_SPEED        0.199
-#define ROT_SPEED       0.1745
+#define MV_SPEED        0.0000199
+#define ROT_SPEED       0.00001745
 #define AMB_LIGHT       7
 
 // Colors
@@ -35,7 +35,7 @@ extern int worldMap[mapWidth][mapHeight];
 #define GREEN           0x00FF00
 #define BLUE            0x0000FF
 #define BLACK           0x000000
-#define PURPLE          0x00FFFF
+#define PURPLE          0x800080
 
 // Structures
 typedef struct      s_sdl
@@ -67,6 +67,7 @@ typedef struct      s_raycaster
   int             draw_end;
   double          perp_wall_dist;
 } t_raycaster;
+
 
 // Proto
 SDL_Color convert_color(int hexa_value);
