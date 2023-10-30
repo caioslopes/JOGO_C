@@ -1,4 +1,9 @@
 #include "raycaster.h"
+#include "buttons.h"
+
+
+
+
 
 int           init(t_sdl *sdl, t_raycaster *rc)
 {
@@ -97,7 +102,7 @@ void          calc_wall_height(t_raycaster *rc)
     rc->draw_end = WIN_Y - 1;
 }
 
-void          draw_vert_line(t_sdl *sdl, t_raycaster *rc, int x)
+void          draw_vert_line(t_sdl *sdl, t_raycaster *rc, int x, keys key)
 {
   SDL_Color   color;
   
@@ -112,6 +117,9 @@ void          draw_vert_line(t_sdl *sdl, t_raycaster *rc, int x)
   SDL_SetRenderDrawColor(sdl->renderer, color.r, color.g, color.b, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLine(sdl->renderer, x, rc->draw_start, x, rc->draw_end);
 
+  movimenta(key, rc);
+  
+
 }
 
 void          render_frame(t_sdl *sdl)
@@ -121,55 +129,14 @@ void          render_frame(t_sdl *sdl)
   SDL_RenderClear(sdl->renderer);
 }
 
-int           handle_events(t_raycaster *rc)
-{
-  SDL_Event   event;
-  double      oldDirX;
-  double      oldPlaneX;
-
-  while (SDL_PollEvent(&event))
-  {
-    if (event.type == SDL_QUIT)
-      return (-1);
-    if (event.type == SDL_KEYDOWN)
-    {
-      if (event.key.keysym.sym == SDLK_UP)
-      {
-        if(worldMap[(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED)][(int)(rc->player_pos_y)] == 0) rc->player_pos_x += rc->player_dir_x * MV_SPEED;
-        if(worldMap[(int)(rc->player_pos_x)][(int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)] == 0) rc->player_pos_y += rc->player_dir_y * MV_SPEED;
-      }
-      if (event.key.keysym.sym == SDLK_DOWN)
-      {
-        if(worldMap[(int)(rc->player_pos_x - rc->player_dir_x * MV_SPEED)][(int)(rc->player_pos_y)] == 0) rc->player_pos_x -= rc->player_dir_x * MV_SPEED;
-        if(worldMap[(int)(rc->player_pos_x)][(int)(rc->player_pos_y - rc->player_dir_y * MV_SPEED)] == 0) rc->player_pos_y -= rc->player_dir_y * MV_SPEED;
-      }
-      if (event.key.keysym.sym == SDLK_RIGHT)
-      {
-        oldDirX = rc->player_dir_x;
-        rc->player_dir_x = rc->player_dir_x * cos(-ROT_SPEED) - rc->player_dir_y * sin(-ROT_SPEED);
-        rc->player_dir_y = oldDirX * sin(-ROT_SPEED) + rc->player_dir_y * cos(-ROT_SPEED);
-        oldPlaneX = rc->player_plane_x;
-        rc->player_plane_x = rc->player_plane_x * cos(-ROT_SPEED) - rc->player_plane_y * sin(-ROT_SPEED);
-        rc->player_plane_y = oldPlaneX * sin(-ROT_SPEED) + rc->player_plane_y * cos(-ROT_SPEED);
-      }
-      if (event.key.keysym.sym == SDLK_LEFT)
-      {
-        oldDirX = rc->player_dir_x;
-        rc->player_dir_x = rc->player_dir_x * cos(ROT_SPEED) - rc->player_dir_y * sin(ROT_SPEED);
-        rc->player_dir_y = oldDirX * sin(ROT_SPEED) + rc->player_dir_y * cos(ROT_SPEED);
-        oldPlaneX = rc->player_plane_x;
-        rc->player_plane_x = rc->player_plane_x * cos(ROT_SPEED) - rc->player_plane_y * sin(ROT_SPEED);
-        rc->player_plane_y = oldPlaneX * sin(ROT_SPEED) + rc->player_plane_y * cos(ROT_SPEED);
-      }
-    }
-  }
-  return (0);
-}
 
 void          raycaster(t_sdl *sdl, t_raycaster *rc)
 {
   SDL_bool    done;
-
+  keys key;
+  initKeys(&key);
+  //double      oldDirX;
+  //double      oldPlaneX;
   done = SDL_FALSE;
   while(!done)
   {
@@ -178,10 +145,11 @@ void          raycaster(t_sdl *sdl, t_raycaster *rc)
       initial_calc(rc, x);
       perform_dda(rc);
       calc_wall_height(rc);
-      draw_vert_line(sdl, rc, x);
+      draw_vert_line(sdl, rc, x, key);
+      //movimenta(key, rc);
     }
     render_frame(sdl);
-    if (handle_events(rc) != 0)
+    if (leTecla(key) != 0)
       done = SDL_TRUE;
   }
 }
