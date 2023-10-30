@@ -51,6 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+#Executável
+raycaster
+
 #Arquivo para Mac
 .DS_store
-raycaster
