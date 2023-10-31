@@ -13,6 +13,7 @@ void init_keys(keys* key){
     k->d = 0;
 
     *key = k;
+    free(k);
 }
 
 int read_keys(keys key){
@@ -25,22 +26,22 @@ int read_keys(keys key){
         }
         if (event.type == SDL_KEYDOWN){
 
-        if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w){
-            key->w = 1;
-        }
+            if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w){
+                key->w = 1;
+            }
 
-        if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s){
-            key->s = 1;
-        }
+            if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s){
+                key->s = 1;
+            }
 
-        if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d){
-            key->d = 1;
-        }
+            if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d){
+                key->d = 1;
+            }
 
 
-        if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a){
-            key->a = 1;
-        }
+            if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a){
+                key->a = 1;
+            }
 
         }
 
