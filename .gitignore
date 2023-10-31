@@ -56,3 +56,5 @@ raycaster
 
 #Arquivo para Mac
 .DS_store
+src/buttons.o
+src/main.o

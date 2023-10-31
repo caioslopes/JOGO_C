@@ -26,7 +26,7 @@ extern int worldMap[mapWidth][mapHeight];
 #define INIT_P_PLANE_X 0
 #define INIT_P_PLANE_Y 0.66
 #define MV_SPEED 0.0000199
-#define ROT_SPEED 0.00001745
+#define ROT_SPEED 0.000001745
 #define AMB_LIGHT 7
 
 // Colors
