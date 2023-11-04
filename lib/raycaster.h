@@ -9,12 +9,7 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <math.h>
-
-// Map
-#define mapWidth 24
-#define mapHeight 24
-
-extern int worldMap[mapWidth][mapHeight];
+#include "maps.h"
 
 // Initial values
 #define WIN_X 1280
@@ -26,7 +21,7 @@ extern int worldMap[mapWidth][mapHeight];
 #define INIT_P_PLANE_X 0
 #define INIT_P_PLANE_Y 0.66
 #define MV_SPEED 0.0000199
-#define ROT_SPEED 0.000001745
+#define ROT_SPEED 0.00001745
 #define AMB_LIGHT 7
 
 // Colors
@@ -36,16 +31,15 @@ extern int worldMap[mapWidth][mapHeight];
 #define BLUE 0x0000FF
 #define BLACK 0x000000
 #define PURPLE 0x800080
+#define YELLOW 0xffff00
 
 // Structures
-typedef struct s_sdl
-{
+typedef struct s_sdl{
   SDL_Window *window;
   SDL_Renderer *renderer;
 } t_sdl;
 
-typedef struct s_raycaster
-{
+typedef struct s_raycaster{
   double player_pos_x;
   double player_pos_y;
   double player_dir_x;
@@ -69,8 +63,8 @@ typedef struct s_raycaster
 } t_raycaster;
 
 // Proto
-SDL_Color convert_color(int hexa_value);
-SDL_Color select_wall_color(int map_x, int map_y);
+SDL_Color convert_color(int hexa_value);  
+SDL_Color select_wall_color(Map map, int map_x, int map_y);
 SDL_Color apply_night_effect(SDL_Color color, double distance);
 
 #endif /* !RAYCASTER_H_ */

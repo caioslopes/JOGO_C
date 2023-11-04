@@ -6,4 +6,4 @@ void init_keys(keys* key);
 
 int read_keys(keys key);
 
-void move_player(keys key, t_raycaster* rc);
+void move_player(Map map, keys key, t_raycaster* rc);

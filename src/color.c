@@ -1,4 +1,5 @@
 #include "raycaster.h"
+#include "maps.h"
 
 SDL_Color convert_color(int hexa_value){
   SDL_Color   color;
@@ -9,20 +10,23 @@ SDL_Color convert_color(int hexa_value){
   return (color); 
 }
 
-SDL_Color select_wall_color(int map_x, int map_y){
-  SDL_Color   color;
+SDL_Color select_wall_color(Map map, int map_x, int map_y){
+  SDL_Color color;
 
-  if (worldMap[map_x][map_y] == 1){
+  if (get_value_of(map, map_x, map_y) == 1){
     color = convert_color(RED);
   }
-  else if (worldMap[map_x][map_y] == 2){
+  else if (get_value_of(map, map_x, map_y) == 2){
     color = convert_color(GREEN);
   }
-  else if (worldMap[map_x][map_y] == 3){
+  else if (get_value_of(map, map_x, map_y) == 3){
     color = convert_color(PURPLE);
   }
-  else if (worldMap[map_x][map_y] == 4){
+  else if (get_value_of(map, map_x, map_y) == 4){
     color = convert_color(WHITE);
+  }
+  else if (get_value_of(map, map_x, map_y) == 9){
+    color = convert_color(YELLOW);
   }
   else {
     color = convert_color(BLACK);
@@ -31,14 +35,13 @@ SDL_Color select_wall_color(int map_x, int map_y){
 }
 
 SDL_Color apply_night_effect(SDL_Color color, double distance){
+  
   if (color.r/distance * AMB_LIGHT <= color.r){
     color.r = color.r/distance * AMB_LIGHT;
   }
-
   if (color.g/distance * AMB_LIGHT <= color.g){
     color.g = color.g/distance * AMB_LIGHT;
   }
-
   if (color.b/distance * AMB_LIGHT <= color.b){
     color.b = color.b/distance * AMB_LIGHT;
   }
