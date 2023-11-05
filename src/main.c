@@ -1,12 +1,13 @@
 #include "raycaster.h"
 #include "buttons.h"
 #include "maps.h"
+#include "player.h"
 
 int init(t_sdl *sdl, t_raycaster *rc);
 void initial_calc(t_raycaster *rc, int x);
 void perform_dda(t_raycaster *rc, Map map);
 void calc_wall_height(t_raycaster *rc);
-void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, keys key);
+void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, keys key, Player player);
 void render_frame(t_sdl *sdl);
 void raycaster(t_sdl *sdl, t_raycaster *rc);
 
@@ -109,7 +110,8 @@ void calc_wall_height(t_raycaster *rc){
     rc->draw_end = WIN_Y - 1;
 }
 
-void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, keys key){
+void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, keys key, Player player){
+
   SDL_Color color;
   
   color = apply_night_effect(select_wall_color(map,rc->map_x, rc->map_y), rc->perp_wall_dist);
@@ -123,8 +125,7 @@ void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, keys key){
   SDL_SetRenderDrawColor(sdl->renderer, color.r, color.g, color.b, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLine(sdl->renderer, x, rc->draw_start, x, rc->draw_end);
 
-  move_player(map, key, rc);
-
+  move_player(map, key, rc, player);
 }
 
 void render_frame(t_sdl *sdl){
@@ -137,6 +138,11 @@ void render_frame(t_sdl *sdl){
 void raycaster(t_sdl *sdl, t_raycaster *rc){
   SDL_bool done;
 
+  /* Player */
+  Player player;
+  player = init_player();
+
+  /* Map */
   Map map;
   map = make_map(a);
 
@@ -159,7 +165,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc){
       initial_calc(rc, x);
       perform_dda(rc, map);
       calc_wall_height(rc);
-      draw_vert_line(map, sdl, rc, x, key);
+      draw_vert_line(map, sdl, rc, x, key, player);
     }
 
     render_frame(sdl);

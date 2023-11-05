@@ -13,8 +13,10 @@ typedef struct map* Map;
 
 Map make_map(int room[][mapHeight]);
 
-void generate_map(Map* map, int room[][mapHeight]);
+void generate_map(Map *map, int room[][mapHeight]);
 
-void change_map(Map* map);
+void change_map(Map *map);
+
+void clear_item(Map *map, int item);
 
 int get_value_of(Map map, int x, int y);

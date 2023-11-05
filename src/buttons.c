@@ -1,5 +1,4 @@
 #include "buttons.h"
-#include "maps.h"
 
 struct ButtonKeys {
   int w, a, s, d;
@@ -60,16 +59,92 @@ int read_keys(keys key){
     return (0);
 }
 
-void move_player(Map map, keys key, t_raycaster *rc){
+void move_player(Map map, keys key, t_raycaster *rc, Player player){
     double oldDirX;
     double oldPlaneX;
 
     if(key->w == 1){
-        if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 9){
-            change_map(&map);
+
+        /* Get Item*/
+        if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0){
+             for(int i = 82; i <= 84; i++){
+                if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == i){
+                    get_item(&player, i);
+                    clear_item(&map, i);
+                }
+            }
         }
-        if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == 9){
-            change_map(&map);
+        if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0){
+            for(int i = 82; i <= 84; i++){
+                if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == i){
+                    get_item(&player, i);
+                    clear_item(&map, i);
+                }
+            }
+        }
+
+        /* Change Map*/
+        if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0){
+            switch (get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)))
+            {
+            case 12:
+                if(search_item(&player, 82))
+                    generate_map(&map, b);
+                break;
+            case 21:
+                if(search_item(&player, 82))
+                    generate_map(&map, a);
+                break;
+            case 13:
+                if(search_item(&player, 83))
+                    generate_map(&map, c);
+                break;
+            case 31:
+                if(search_item(&player, 83))
+                    generate_map(&map, a);
+                break;
+            case 14:
+                if(search_item(&player, 84))
+                    generate_map(&map, d);
+                break;
+            case 41:
+                if(search_item(&player, 84))
+                    generate_map(&map, a);
+                break;
+            default:
+                break;
+            }
+        }
+        if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0){
+            switch (get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)))
+            {
+            case 12:
+                if(search_item(&player, 82))
+                    generate_map(&map, b);
+                break;
+            case 21:
+                if(search_item(&player, 82))
+                    generate_map(&map, a);
+                break;
+            case 13:
+                if(search_item(&player, 83))
+                    generate_map(&map, c);
+                break;
+            case 31:
+                if(search_item(&player, 83))
+                    generate_map(&map, a);
+                break;
+            case 14:
+                if(search_item(&player, 84))
+                    generate_map(&map, d);
+                break;
+            case 41:
+                if(search_item(&player, 84))
+                    generate_map(&map, a);
+                break;
+            default:
+                break;
+            }
         }
 
         if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0){ // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa  
