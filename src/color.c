@@ -14,7 +14,7 @@ SDL_Color select_wall_color(Map map, int map_x, int map_y){
   SDL_Color color;
 
   if (get_value_of(map, map_x, map_y) == 1){
-    color = convert_color(RED);
+    color = convert_color(GRAY);
   }
   else if (get_value_of(map, map_x, map_y) == 2){
     color = convert_color(GREEN);
@@ -25,17 +25,14 @@ SDL_Color select_wall_color(Map map, int map_x, int map_y){
   else if (get_value_of(map, map_x, map_y) == 4){
     color = convert_color(WHITE);
   }
-  else if (get_value_of(map, map_x, map_y) == 12 || get_value_of(map, map_x, map_y) == 21 ){
-    color = convert_color(GRAY1);
+  else if (get_value_of(map, map_x, map_y) == 9){
+    color = convert_color(RED);
   }
-  else if (get_value_of(map, map_x, map_y) == 13 || get_value_of(map, map_x, map_y) == 31){
-    color = convert_color(GRAY2);
+  else if (get_value_of(map, map_x, map_y) == 12 || get_value_of(map, map_x, map_y) == 21 || get_value_of(map, map_x, map_y) == 13 || get_value_of(map, map_x, map_y) == 31 || get_value_of(map, map_x, map_y) == 14 || get_value_of(map, map_x, map_y) == 41 || get_value_of(map, map_x, map_y) == 15 || get_value_of(map, map_x, map_y) == 51 || get_value_of(map, map_x, map_y) == 16 || get_value_of(map, map_x, map_y) == 61 ){
+    color = convert_color(RED);
   }
-  else if (get_value_of(map, map_x, map_y) == 14 || get_value_of(map, map_x, map_y) == 41){
-    color = convert_color(GRAY3);
-  }
-  else if (get_value_of(map, map_x, map_y) == 82 || get_value_of(map, map_x, map_y) == 83 || get_value_of(map, map_x, map_y) == 84){
-    color = convert_color(MARRON);
+  else if (get_value_of(map, map_x, map_y) == 82 || get_value_of(map, map_x, map_y) == 83 || get_value_of(map, map_x, map_y) == 84 || get_value_of(map, map_x, map_y) == 85 || get_value_of(map, map_x, map_y) == 86){
+    color = convert_color(YELLOW);
   }
   else {
     color = convert_color(BLACK);

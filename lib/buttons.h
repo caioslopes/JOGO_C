@@ -1,11 +1,15 @@
 #include "raycaster.h"
-#include "maps.h"
-#include "player.h"
 
-typedef struct ButtonKeys* keys;
+typedef struct keys* ButtonKeys;
 
-void init_keys(keys* key);
+ButtonKeys init_keys();
 
-int read_keys(keys key);
+int read_keys(ButtonKeys key);
 
-void move_player(Map map, keys key, t_raycaster* rc, Player player);
+int get_w(ButtonKeys key);
+
+int get_a(ButtonKeys key);
+
+int get_d(ButtonKeys key);
+
+int get_s(ButtonKeys key);

@@ -7,7 +7,7 @@ int init(t_sdl *sdl, t_raycaster *rc);
 void initial_calc(t_raycaster *rc, int x);
 void perform_dda(t_raycaster *rc, Map map);
 void calc_wall_height(t_raycaster *rc);
-void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, keys key, Player player);
+void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, ButtonKeys key, Player player);
 void render_frame(t_sdl *sdl);
 void raycaster(t_sdl *sdl, t_raycaster *rc);
 
@@ -110,7 +110,7 @@ void calc_wall_height(t_raycaster *rc){
     rc->draw_end = WIN_Y - 1;
 }
 
-void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, keys key, Player player){
+void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x, ButtonKeys key, Player player){
 
   SDL_Color color;
   
@@ -144,11 +144,11 @@ void raycaster(t_sdl *sdl, t_raycaster *rc){
 
   /* Map */
   Map map;
-  map = make_map(a);
+  map = init_map();
 
   /* Keys */
-  keys key;
-  init_keys(&key);
+  ButtonKeys key;
+  key = init_keys();
 
   done = SDL_FALSE;
 

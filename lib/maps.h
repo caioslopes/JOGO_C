@@ -4,14 +4,17 @@
 #define mapWidth 24
 #define mapHeight 24
 
-extern int a[mapWidth][mapHeight];
-extern int b[mapWidth][mapHeight];
-extern int c[mapWidth][mapHeight];
-extern int d[mapWidth][mapHeight];
+extern int main_room[mapWidth][mapHeight];
+extern int first_room[mapWidth][mapHeight];
+extern int second_room[mapWidth][mapHeight];
+extern int third_room[mapWidth][mapHeight];
+extern int fourth_room[mapWidth][mapHeight];
+extern int final_room[mapWidth][mapHeight];
+
 
 typedef struct map* Map;
 
-Map make_map(int room[][mapHeight]);
+Map init_map();
 
 void generate_map(Map *map, int room[][mapHeight]);
 

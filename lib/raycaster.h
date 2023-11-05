@@ -9,8 +9,12 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <math.h>
-#include "maps.h"
 #include <stdbool.h>
+
+// Local includes
+#include "maps.h"
+#include "maps.h"
+#include "buttons.h"
 
 // Initial values
 #define WIN_X 1280
@@ -21,9 +25,9 @@
 #define INIT_P_DIR_Y 0
 #define INIT_P_PLANE_X 0
 #define INIT_P_PLANE_Y 0.66
-#define MV_SPEED 0.000199
+#define MV_SPEED 0.00005
 #define ROT_SPEED 0.00001745
-#define AMB_LIGHT 7
+#define AMB_LIGHT 2
 
 // Colors
 #define WHITE 0xFFFFFF
@@ -33,9 +37,7 @@
 #define BLACK 0x000000
 #define PURPLE 0x800080
 #define YELLOW 0xffff00
-#define GRAY1 0x343434
-#define GRAY2 0x747474
-#define GRAY3 0x8d8d8d
+#define GRAY 0x8d8d8d
 #define MARRON 0x800000
 
 // Structures

@@ -1,4 +1,5 @@
 #include "raycaster.h"
+#include "buttons.h"
 
 #define SIZE_POCKET 4
 
@@ -15,3 +16,5 @@ bool search_item(Player *player, int item);
 bool pocket_is_full(Player *player);
 
 bool pocket_is_empty(Player *player);
+
+void move_player(Map map, ButtonKeys key, t_raycaster* rc, Player player);

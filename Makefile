@@ -5,7 +5,8 @@
 SRC		=	./src/main.c	\
 			./src/color.c	\
 			./src/map.c		\
-			./src/buttons.c
+			./src/buttons.c \
+			./src/player.c
 
 NAME	=	raycaster
 
