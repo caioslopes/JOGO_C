@@ -5,6 +5,7 @@ struct keys {
   int a;
   int s;
   int d;
+  int e;
 };
 
 ButtonKeys init_keys(){
@@ -14,6 +15,7 @@ ButtonKeys init_keys(){
     keys->a = 0;
     keys->s = 0;
     keys->d = 0;
+    keys->e = 0;
     return keys;
 }
 
@@ -39,6 +41,10 @@ int read_keys(ButtonKeys key){
             if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a){
                 key->a = 1;
             }
+            if (event.key.keysym.sym == SDLK_e){
+                key->e = 1;
+            }
+            
         }
 
         if (event.type == SDL_KEYUP){
@@ -53,6 +59,9 @@ int read_keys(ButtonKeys key){
             }
             if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a){
                 key->a = 0;
+            }
+            if (event.key.keysym.sym == SDLK_e){
+                key->e = 0;
             }
         }
     }
@@ -74,4 +83,8 @@ int get_d(ButtonKeys key){
 
 int get_s(ButtonKeys key){
     return key->s;
+}
+
+int get_e(ButtonKeys key){
+    return key->e;
 }

@@ -18,8 +18,6 @@ Map init_map();
 
 void generate_map(Map *map, int room[][mapHeight]);
 
-void change_map(Map *map);
-
-void clear_item(Map *map, int item);
+void clear_item(Map *map, int room[][mapHeight], int item);
 
 int get_value_of(Map map, int x, int y);

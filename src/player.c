@@ -61,115 +61,237 @@ void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player){
     if(get_w(key) == 1){
 
         /* Get Item */
-        if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0){
-             for(int i = 83; i <= 86; i++){
-                if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == i){
-                    get_item(&player, i);
-                    clear_item(&map, i);
-                }
+        if(get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0){
+            switch (get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)))
+            {
+            case 83:
+                get_item(&player, 83);
+                clear_item(&map, first_room, 83);
+                break;
+            case 84:
+                get_item(&player, 84);
+                clear_item(&map, second_room, 84);
+                break;
+            case 85:
+                get_item(&player, 85);
+                clear_item(&map, third_room, 85);
+                break;
+            case 86:
+                get_item(&player, 86);
+                clear_item(&map, fourth_room, 86);
+                break;
             }
         }
-        if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0){
-            for(int i = 83; i <= 86; i++){
-                if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == i){
-                    get_item(&player, i);
-                    clear_item(&map, i);
-                }
+        if(get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0){
+            switch (get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)))
+            {
+            case 83:
+                get_item(&player, 83);
+                clear_item(&map, first_room, 83);
+                break;
+            case 84:
+                get_item(&player, 84);
+                clear_item(&map, second_room, 84);
+                break;
+            case 85:
+                get_item(&player, 85);
+                clear_item(&map, third_room, 85);
+                break;
+            case 86:
+                get_item(&player, 86);
+                clear_item(&map, fourth_room, 86);
+                break;
             }
         }
 
         /* Change Map*/
-        if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0){
-            switch (get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)))
+        if(get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0){
+            switch (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)))
             {
             case 12:
+                if(get_e(key) == 1){
                     generate_map(&map, first_room);
+                    rc->player_pos_x = 19;
+                    rc->player_pos_y = 22;
+                }
                 break;
             case 21:
+                if(get_e(key) == 1){
                     generate_map(&map, main_room);
+                    rc->player_pos_x = 7;
+                    rc->player_pos_y = 11;
+                }
                 break;
             case 13:
-                if(search_item(&player, 83))
-                    generate_map(&map, second_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 83)){
+                        generate_map(&map, second_room);
+                        rc->player_pos_x = 19;
+                        rc->player_pos_y = 2;
+                    }
+                }
                 break;
             case 31:
-                if(search_item(&player, 83))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 83)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 7;
+                        rc->player_pos_y = 12;
+                    }
+                }
                 break;
             case 14:
-                if(search_item(&player, 84))
-                    generate_map(&map, third_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 84)){
+                        generate_map(&map, third_room);
+                        rc->player_pos_x = 4;
+                        rc->player_pos_y = 2;
+                    }
+                }
                 break;
             case 41:
-                if(search_item(&player, 84))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 84)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 15;
+                        rc->player_pos_y = 12;
+                    }
+                }
                 break;
             case 15:
-                if(search_item(&player, 85))
-                    generate_map(&map, fourth_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 85)){
+                        generate_map(&map, fourth_room);
+                        rc->player_pos_x = 4;
+                        rc->player_pos_y = 22;
+                    }
+                }
                 break;
             case 51:
-                if(search_item(&player, 85))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 85)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 15;
+                        rc->player_pos_y = 11;
+                    }
+                }
                 break;
             case 16:
-                if(search_item(&player, 86))
-                    generate_map(&map, final_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 86)){
+                        generate_map(&map, final_room);
+                        rc->player_pos_x = 22;
+                        rc->player_pos_y = 11;
+                    }
+                }
                 break;
             case 61:
-                if(search_item(&player, 86))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 86)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 2;
+                        rc->player_pos_y = 11;
+                    }
+                }
                 break;
             }
         }
-        if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0){
+        if(get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0){
             switch (get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)))
             {
             case 12:
+                if(get_e(key) == 1){
                     generate_map(&map, first_room);
+                    rc->player_pos_x = 19;
+                    rc->player_pos_y = 22;
+                }
                 break;
             case 21:
+                if(get_e(key) == 1){
                     generate_map(&map, main_room);
+                    rc->player_pos_x = 7;
+                    rc->player_pos_y = 11;
+                }
                 break;
             case 13:
-                if(search_item(&player, 83))
-                    generate_map(&map, second_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 83)){
+                        generate_map(&map, second_room);
+                        rc->player_pos_x = 19;
+                        rc->player_pos_y = 2;
+                    }
+                }
                 break;
             case 31:
-                if(search_item(&player, 83))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 83)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 7;
+                        rc->player_pos_y = 12;
+                    }
+                }
                 break;
             case 14:
-                if(search_item(&player, 84))
-                    generate_map(&map, third_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 84)){
+                        generate_map(&map, third_room);
+                        rc->player_pos_x = 4;
+                        rc->player_pos_y = 2;
+                    }
+                }
                 break;
             case 41:
-                if(search_item(&player, 84))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 84)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 15;
+                        rc->player_pos_y = 12;
+                    }
+                }
                 break;
             case 15:
-                if(search_item(&player, 85))
-                    generate_map(&map, fourth_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 85)){
+                        generate_map(&map, fourth_room);
+                        rc->player_pos_x = 4;
+                        rc->player_pos_y = 22;
+                    }
+                }
                 break;
             case 51:
-                if(search_item(&player, 85))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 85)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 15;
+                        rc->player_pos_y = 11;
+                    }
+                }
                 break;
             case 16:
-                if(search_item(&player, 86))
-                    generate_map(&map, final_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 86)){
+                        generate_map(&map, final_room);
+                        rc->player_pos_x = 22;
+                        rc->player_pos_y = 11;
+                    }
+                }
                 break;
             case 61:
-                if(search_item(&player, 86))
-                    generate_map(&map, main_room);
+                if(get_e(key) == 1){
+                    if(search_item(&player, 86)){
+                        generate_map(&map, main_room);
+                        rc->player_pos_x = 2;
+                        rc->player_pos_y = 11;
+                    }
+                }
                 break;
             }
         }
 
-        if(get_value_of(map,(int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0){ // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa  
+        if(get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0){ // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa  
             rc->player_pos_x += rc->player_dir_x * MV_SPEED; // incrementa a posição do player no eixo X 
         }
-        if(get_value_of(map,(int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == 0) { // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
+        if(get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == 0) { // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
             rc->player_pos_y += rc->player_dir_y * MV_SPEED;  // incrementa a posição do player no eixo Y
         }
     }
