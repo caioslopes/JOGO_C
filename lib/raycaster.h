@@ -1,7 +1,3 @@
-/*
-** raycaster.h
-*/
-
 #ifndef RAYCASTER_H_
 #define RAYCASTER_H_
 
@@ -12,9 +8,9 @@
 #include <stdbool.h>
 
 // Local includes
-#include "maps.h"
-#include "maps.h"
 #include "buttons.h"
+#include "maps.h"
+#include "colors.h"
 
 // Initial values
 #define WIN_X 1280
@@ -28,17 +24,6 @@
 #define MV_SPEED 0.00005
 #define ROT_SPEED 0.00001745
 #define AMB_LIGHT 2
-
-// Colors
-#define WHITE 0xFFFFFF
-#define RED 0xFF0000
-#define GREEN 0x00FF00
-#define BLUE 0x0000FF
-#define BLACK 0x000000
-#define PURPLE 0x800080
-#define YELLOW 0xffff00
-#define GRAY 0x8d8d8d
-#define MARRON 0x800000
 
 // Structures
 typedef struct s_sdl{
@@ -69,9 +54,4 @@ typedef struct s_raycaster{
   double perp_wall_dist;
 } t_raycaster;
 
-// Proto
-SDL_Color convert_color(int hexa_value);  
-SDL_Color select_wall_color(Map map, int map_x, int map_y);
-SDL_Color apply_night_effect(SDL_Color color, double distance);
-
-#endif /* !RAYCASTER_H_ */
+#endif
