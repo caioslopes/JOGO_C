@@ -2,6 +2,7 @@
 
 struct player
 {
+    bool is_alive;
     int pocket[SIZE_POCKET];
     int i_pocket;
 };
@@ -10,9 +11,15 @@ Player init_player(){
     Player player;
     player = malloc(sizeof(struct player));
     player->i_pocket = -1;
+    player->is_alive = true;
     init_pocket(&player);
     return player;
 }
+
+void set_is_alive(Player *player, bool status){
+    (*player)->is_alive = status;
+}
+
 
 void init_pocket(Player *player){
     if(pocket_is_empty(player)){
@@ -54,7 +61,7 @@ bool pocket_is_empty(Player *player){
     return (*player)->i_pocket == -1;
 }
 
-void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player){
+void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue queue){
     double oldDirX;
     double oldPlaneX;
 
@@ -288,12 +295,21 @@ void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player){
             }
         }
 
+        int x, y;
+        x = (int) (rc->player_pos_x);
+        y = (int) (rc->player_pos_y);
+
         if(get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0){ // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa  
             rc->player_pos_x += rc->player_dir_x * MV_SPEED; // incrementa a posição do player no eixo X 
         }
         if(get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == 0) { // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
             rc->player_pos_y += rc->player_dir_y * MV_SPEED;  // incrementa a posição do player no eixo Y
         }
+
+        if(x != (int)(rc->player_pos_x) || y != (int) (rc->player_pos_y)){
+            printf("%s\n", enqueue(queue, *rc) ? "OK" : "ERRO");
+        }
+
     }
 
     if(get_a(key) == 1){

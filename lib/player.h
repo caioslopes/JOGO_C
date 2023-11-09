@@ -1,4 +1,5 @@
 #include "raycaster.h"
+#include "queue.h"
 
 #define SIZE_POCKET 4
 
@@ -8,6 +9,8 @@ Player init_player();
 
 void init_pocket(Player *player);
 
+void set_is_alive(Player *player, bool status);
+
 void get_item(Player *player, int item);
 
 bool search_item(Player *player, int item);
@@ -16,4 +19,4 @@ bool pocket_is_full(Player *player);
 
 bool pocket_is_empty(Player *player);
 
-void move_player(Map map, ButtonKeys key, t_raycaster* rc, Player player);
+void move_player(Map map, ButtonKeys key, t_raycaster* rc, Player player, Queue queue);
