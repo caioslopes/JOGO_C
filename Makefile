@@ -2,7 +2,7 @@
 ## C/SDL2 Raycaster Makefile
 ##
 
-SRC		=	./src/main.c	\
+SRC		=	./src/raycaster.c	\
 			./src/color.c	\
 			./src/map.c		\
 			./src/buttons.c \

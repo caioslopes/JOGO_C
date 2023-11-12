@@ -2,11 +2,15 @@
 #include "queue.h"
 #include "player.h"
 
+#define START_WALKING 10
+
 typedef struct monster* Monster;
 
 Monster init_monster();
 
-void m_walk(Queue *queue);
+void m_walk(Queue *queue, Monster monster);
+
+void m_jump(Queue *queue, int size_jump);
 
 bool is_walking(Monster monster);
 

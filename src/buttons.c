@@ -6,6 +6,7 @@ struct keys {
   int s;
   int d;
   int e;
+  int esc;
 };
 
 ButtonKeys init_keys(){
@@ -16,6 +17,7 @@ ButtonKeys init_keys(){
     keys->s = 0;
     keys->d = 0;
     keys->e = 0;
+    keys->esc = 0;
     return keys;
 }
 
@@ -87,4 +89,8 @@ int get_s(ButtonKeys key){
 
 int get_e(ButtonKeys key){
     return key->e;
+}
+
+int get_esc(ButtonKeys key){
+    return key->esc;
 }

@@ -33,7 +33,7 @@ bool is_full(Queue queue);
 /**
  * Retorna se a queue está vazia ou não.
 */
-bool is_empty(Queue queue);
+bool is_empty(Queue queue);  
 
 /**
  * Retorna o tamanho da fila.

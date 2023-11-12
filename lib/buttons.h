@@ -15,3 +15,5 @@ int get_d(ButtonKeys key);
 int get_s(ButtonKeys key);
 
 int get_e(ButtonKeys key);
+
+int get_esc(ButtonKeys key);

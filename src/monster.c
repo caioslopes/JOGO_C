@@ -12,8 +12,18 @@ Monster init_monster(){
     return m;
 }
 
-void m_walk(Queue *queue){
-    dequeue(*queue);
+void m_walk(Queue *queue, Monster monster){
+    if(is_walking(monster)){
+        dequeue(*queue);
+        printf("Monstro andando!\n");
+    }
+}
+
+void m_jump(Queue *queue, int size_jump){
+    for(int i = 0; i < size_jump && !is_empty(*queue); i++){
+        dequeue(*queue);
+    }
+    printf("Monstro pulou!\n");
 }
 
 bool is_walking(Monster monster){
