@@ -1,6 +1,4 @@
 #include "raycaster.h"
-#include "player.h"
-#include "monster.h"
 
 int init(t_sdl *sdl, t_raycaster *rc);
 void initial_calc(t_raycaster *rc, int x);

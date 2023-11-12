@@ -148,92 +148,92 @@ void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue 
 
 void change_map(int door, Map *map, t_raycaster *rc, ButtonKeys key, Player player){
   switch (door)
-    {
-    case 12:
-        if(get_e(key) == 1){
-            generate_map(map, first_room);
-            rc->player_pos_x = 19;
-            rc->player_pos_y = 22;
-        }
-        break;
-    case 21:
-        if(get_e(key) == 1){
-            generate_map(map, main_room);
-            rc->player_pos_x = 7;
-            rc->player_pos_y = 11;
-        }
-        break;
-    case 13:
-        if(get_e(key) == 1){
-            if(search_item(&player, 83)){
-                generate_map(map, second_room);
-                rc->player_pos_x = 19;
-                rc->player_pos_y = 2;
-            }
-        }
-        break;
-    case 31:
-        if(get_e(key) == 1){
-            if(search_item(&player, 83)){
-                generate_map(map, main_room);
-                rc->player_pos_x = 7;
-                rc->player_pos_y = 12;
-            }
-        }
-        break;
-    case 14:
-        if(get_e(key) == 1){
-            if(search_item(&player, 84)){
-                generate_map(map, third_room);
-                rc->player_pos_x = 4;
-                rc->player_pos_y = 2;
-            }
-        }
-        break;
-    case 41:
-        if(get_e(key) == 1){
-            if(search_item(&player, 84)){
-                generate_map(map, main_room);
-                rc->player_pos_x = 15;
-                rc->player_pos_y = 12;
-            }
-        }
-        break;
-    case 15:
-        if(get_e(key) == 1){
-            if(search_item(&player, 85)){
-                generate_map(map, fourth_room);
-                rc->player_pos_x = 4;
-                rc->player_pos_y = 22;
-            }
-        }
-        break;
-    case 51:
-        if(get_e(key) == 1){
-            if(search_item(&player, 85)){
-                generate_map(map, main_room);
-                rc->player_pos_x = 15;
-                rc->player_pos_y = 11;
-            }
-        }
-        break;
-    case 16:
-        if(get_e(key) == 1){
-            if(search_item(&player, 86)){
-                generate_map(map, final_room);
-                rc->player_pos_x = 22;
-                rc->player_pos_y = 11;
-            }
-        }
-        break;
-    case 61:
-        if(get_e(key) == 1){
-            if(search_item(&player, 86)){
-                generate_map(map, main_room);
-                rc->player_pos_x = 2;
-                rc->player_pos_y = 11;
-            }
-        }
-        break;
+  {
+  case 12:
+    if(get_e(key) == 1){
+      generate_map(map, first_room);
+      rc->player_pos_x = 19;
+      rc->player_pos_y = 22;
     }
+    break;
+  case 21:
+    if(get_e(key) == 1){
+      generate_map(map, main_room);
+      rc->player_pos_x = 7;
+      rc->player_pos_y = 11;
+    }
+    break;
+  case 13:
+    if(get_e(key) == 1){
+      if(search_item(&player, 83)){
+          generate_map(map, second_room);
+          rc->player_pos_x = 19;
+          rc->player_pos_y = 2;
+      }
+    }
+    break;
+  case 31:
+    if(get_e(key) == 1){
+      if(search_item(&player, 83)){
+          generate_map(map, main_room);
+          rc->player_pos_x = 7;
+          rc->player_pos_y = 12;
+      }
+    }
+    break;
+  case 14:
+    if(get_e(key) == 1){
+      if(search_item(&player, 84)){
+          generate_map(map, third_room);
+          rc->player_pos_x = 4;
+          rc->player_pos_y = 2;
+      }
+    }
+    break;
+  case 41:
+    if(get_e(key) == 1){
+      if(search_item(&player, 84)){
+          generate_map(map, main_room);
+          rc->player_pos_x = 15;
+          rc->player_pos_y = 12;
+      }
+    }
+    break;
+  case 15:
+    if(get_e(key) == 1){
+      if(search_item(&player, 85)){
+          generate_map(map, fourth_room);
+          rc->player_pos_x = 4;
+          rc->player_pos_y = 22;
+      }
+    }
+    break;
+  case 51:
+    if(get_e(key) == 1){
+      if(search_item(&player, 85)){
+          generate_map(map, main_room);
+          rc->player_pos_x = 15;
+          rc->player_pos_y = 11;
+      }
+    }
+    break;
+  case 16:
+    if(get_e(key) == 1){
+      if(search_item(&player, 86)){
+          generate_map(map, final_room);
+          rc->player_pos_x = 22;
+          rc->player_pos_y = 11;
+      }
+    }
+    break;
+  case 61:
+    if(get_e(key) == 1){
+      if(search_item(&player, 86)){
+          generate_map(map, main_room);
+          rc->player_pos_x = 2;
+          rc->player_pos_y = 11;
+      }
+    }
+    break;
+  }
 }

@@ -1,6 +1,4 @@
 #include "raycaster.h"
-#include "colors.h"
-#include "maps.h"
 
 SDL_Color convert_color(int hexa_value){
   SDL_Color   color;

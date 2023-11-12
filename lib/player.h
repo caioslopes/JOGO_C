@@ -1,5 +1,4 @@
 #include "raycaster.h"
-#include "queue.h"
 
 #define SIZE_POCKET 4
 

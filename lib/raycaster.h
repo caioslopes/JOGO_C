@@ -8,11 +8,6 @@
 #include <math.h>
 #include <stdbool.h>
 
-// Local includes
-#include "buttons.h"
-#include "maps.h"
-#include "colors.h"
-
 // Initial values
 #define WIN_X 1280
 #define WIN_Y 720
@@ -54,5 +49,13 @@ typedef struct s_raycaster{
   int draw_end;
   double perp_wall_dist;
 } t_raycaster;
+
+// Local includes
+#include "buttons.h"
+#include "maps.h"
+#include "colors.h"
+#include "queue.h"
+#include "player.h"
+#include "monster.h"
 
 #endif
