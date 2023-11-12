@@ -1,13 +1,5 @@
 #include "raycaster.h"
 
-int init(t_sdl *sdl, t_raycaster *rc);
-void initial_calc(t_raycaster *rc, int x);
-void perform_dda(t_raycaster *rc, Map map);
-void calc_wall_height(t_raycaster *rc);
-void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x);
-void render_frame(t_sdl *sdl);
-void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys *key, Queue *queue, Monster *monster);
-
 int main()
 {
     t_sdl sdl;

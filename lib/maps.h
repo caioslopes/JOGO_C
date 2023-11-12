@@ -1,4 +1,4 @@
-#include "raycaster.h"
+#include "default.h"
 
 // Map
 #define mapWidth 24

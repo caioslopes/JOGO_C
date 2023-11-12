@@ -1,12 +1,8 @@
 #ifndef RAYCASTER_H_
 #define RAYCASTER_H_
 
-// System includes
-#include <SDL2/SDL.h>
-#include <SDL_mixer.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdbool.h>
+// System include
+#include "default.h"
 
 // Initial values
 #define WIN_X 1280
@@ -19,7 +15,6 @@
 #define INIT_P_PLANE_Y 0.66
 #define MV_SPEED 0.00005
 #define ROT_SPEED 0.00001745
-#define AMB_LIGHT 2
 
 // Structures
 typedef struct s_sdl{
@@ -51,11 +46,17 @@ typedef struct s_raycaster{
 } t_raycaster;
 
 // Local includes
-#include "buttons.h"
 #include "maps.h"
 #include "colors.h"
-#include "queue.h"
 #include "player.h"
 #include "monster.h"
+
+int init(t_sdl *sdl, t_raycaster *rc);
+void initial_calc(t_raycaster *rc, int x);
+void perform_dda(t_raycaster *rc, Map map);
+void calc_wall_height(t_raycaster *rc);
+void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x);
+void render_frame(t_sdl *sdl);
+void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys *key, Queue *queue, Monster *monster);
 
 #endif

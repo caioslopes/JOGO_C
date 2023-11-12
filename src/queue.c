@@ -1,7 +1,7 @@
 #include "queue.h"
 
 struct queue{
-    t_raycaster items[QUEUE_MAX_SIZE];
+    int items[QUEUE_MAX_SIZE];
     int last, first, size;
 };
 
@@ -27,7 +27,7 @@ int get_size(Queue queue){
     return queue->size;
 }
 
-bool enqueue(Queue queue, t_raycaster new_element){
+bool enqueue(Queue queue, int new_element){
     bool answer = false;
     if(! is_full(queue)){
         if(queue->last == QUEUE_MAX_SIZE - 1){
@@ -42,8 +42,8 @@ bool enqueue(Queue queue, t_raycaster new_element){
     return answer;
 }
 
-t_raycaster dequeue(Queue queue){
-    t_raycaster answer;
+int dequeue(Queue queue){
+    int answer;
     if(!is_empty(queue)){
         if(queue->first == QUEUE_MAX_SIZE - 1){
             queue->first = 0;

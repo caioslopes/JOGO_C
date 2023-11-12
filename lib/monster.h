@@ -1,4 +1,6 @@
-#include "raycaster.h"
+#include "default.h"
+#include "queue.h"
+#include "player.h"
 
 #define START_WALKING 10
 

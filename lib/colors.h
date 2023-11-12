@@ -1,4 +1,7 @@
-#include "raycaster.h"
+#include "default.h"
+#include "maps.h"
+
+#define AMB_LIGHT 2
 
 // Colors
 #define WHITE 0xFFFFFF
