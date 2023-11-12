@@ -52,7 +52,7 @@ int init(t_sdl *sdl, t_raycaster *rc)
   rc->player_dir_y = INIT_P_DIR_Y;
   rc->player_plane_x = INIT_P_PLANE_X;
   rc->player_plane_y = INIT_P_PLANE_Y;
-  if (SDL_Init(SDL_INIT_VIDEO) != 0)
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
   {
     fprintf(stderr, "SDL initialization failed (%s)\n", SDL_GetError());
     return (-1);
@@ -141,9 +141,7 @@ void calc_wall_height(t_raycaster *rc)
 
 void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x)
 {
-
   SDL_Color color;
-
   color = apply_night_effect(select_wall_color(map, rc->map_x, rc->map_y), rc->perp_wall_dist);
 
   if (rc->side == 1)
@@ -166,7 +164,6 @@ void render_frame(t_sdl *sdl)
 
 void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys *key, Queue *queue){
   SDL_bool done;
-
   done = SDL_FALSE;
 
   /* Testes */
@@ -176,6 +173,13 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
   monster = init_monster();
 
   int timer = 0;
+
+  Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+  Mix_Music *soundtrack = Mix_LoadMUS("../sounds/teste-track-mp3.mp3");
+  Mix_Chunk *kick = Mix_LoadWAV("../sounds/kick.wav");
+
+  Mix_PlayMusic(soundtrack, -1);
 
   /* FPS */
   int fps = 60;
@@ -205,6 +209,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
         if(timer >= 100000){
           m_walk(queue);
           printf("Monstro andando!\n");
+          Mix_PlayChannel(-1, kick, 0);
           timer = 0;
         }
 
@@ -219,8 +224,13 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
     
     render_frame(sdl);
 
-    if (read_keys(*key) != 0)
+    if (read_keys(*key) != 0){
       done = SDL_TRUE;
+      Mix_FreeMusic(soundtrack);
+      Mix_FreeChunk(kick);
+      Mix_CloseAudio();
+    }
+
 
     frameTime = SDL_GetTicks() - frameStart;
     if (frameDelay > frameTime)
