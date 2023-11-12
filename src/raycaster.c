@@ -184,7 +184,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
             perform_dda(rc, *map);
             calc_wall_height(rc);
             draw_vert_line(*map, sdl, rc, x);
-            move_player(*map, *key, rc, *player, *queue);
+            move_player(*map, *key, rc, *player, *queue, x);
 
             if (get_size(*queue) == START_WALKING)
             {

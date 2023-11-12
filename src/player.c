@@ -96,7 +96,32 @@ bool pocket_is_empty(Player *player)
     return (*player)->i_pocket == -1;
 }
 
-void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue queue)
+bool is_collided(Map map, t_raycaster *rc, int ray)
+{
+    bool collide = false;
+
+    if (rc->draw_end == WIN_Y - 1 && (ray > (WIN_X / 5 * 2) || ray < WIN_X/5 * 4))
+    {
+        if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) > 0)
+        {
+            if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) < 5)
+            {
+                collide = true;
+            }
+        }
+        if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) > 0)
+        {
+            if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) < 5)
+            {
+                collide = true;
+            }
+        }
+    }
+
+    return collide;
+}
+
+void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue queue, int ray)
 {
     if (get_is_alive(player))
     {
@@ -131,11 +156,11 @@ void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue 
             x = (int)(rc->player_pos_x);
             y = (int)(rc->player_pos_y);
 
-            if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0)
+            if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0 /* && !is_collided(map, rc, ray) */)
             {                                                    // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
                 rc->player_pos_x += rc->player_dir_x * MV_SPEED; // incrementa a posição do player no eixo X
             }
-            if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == 0)
+            if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == 0 /* && !is_collided(map, rc, ray) */)
             {                                                    // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
                 rc->player_pos_y += rc->player_dir_y * MV_SPEED; // incrementa a posição do player no eixo Y
             }
