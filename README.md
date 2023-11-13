@@ -22,7 +22,7 @@ Estágio grafico - 12/11/2023
 ![](https://i.imgur.com/h7fsl5X.png)
 
 Gif movimentação em jogo - 13/11/2023
-![](https://i.imgur.com/HxThV9w.gifv)
+![](https://i.imgur.com/HxThV9w.gif)
 
 ## Estrutura e Estratégia
 - Monstro
