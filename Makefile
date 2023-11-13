@@ -7,7 +7,7 @@ SRC		=	./src/raycaster.c	\
 			./src/map.c		\
 			./src/buttons.c \
 			./src/player.c  \
-			./src/monter.c  \
+			./src/monster.c  \
 			./src/queue.c   
 
 NAME	=	raycaster
@@ -21,7 +21,7 @@ OBJ		=	$(SRC:.c=.o)
 CFLAGS	=	-O2 -W -Wall -Wextra -Werror
 CFLAGS	+=	-I./lib/
 
-LDLIBS	=	-lSDL2 -lm
+LDLIBS	=	-lSDL2 -lSDL2_mixer -lm
 
 all		:	$(NAME)
 
