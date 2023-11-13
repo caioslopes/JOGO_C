@@ -18,7 +18,7 @@ OBJ		=	$(SRC:.c=.o)
 CFLAGS	=	-O2 -W -Wall -Wextra -Werror
 CFLAGS	+=	-I./lib/
 
-LDLIBS	=	-lSDL2 -lSDL2_mixer -lm
+LDLIBS	=	-lSDL2 -lSDL2_mixer -lSDL2_ttf -lm
 
 ## Variables for macOs
 OBJECT 	=  ./src/*.c

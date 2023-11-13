@@ -5,6 +5,7 @@ struct player
     bool is_alive;
     int pocket[SIZE_POCKET];
     int i_pocket;
+    int quantity;
 };
 
 Player init_player()
@@ -13,6 +14,7 @@ Player init_player()
     player = malloc(sizeof(struct player));
     player->i_pocket = -1;
     player->is_alive = true;
+    player->quantity = 0;
     init_pocket(&player);
     return player;
 }
@@ -69,6 +71,36 @@ void get_item(Player *player, int item, Map map, Mix_Chunk *getkeys)
             }
         }
     }
+}
+
+void add_key_quantity(Player *player, int key){
+    (*player)->quantity += key;
+}
+
+char get_key_quantity(Player *player){
+
+    char answer = '0';
+
+    switch ((*player)->quantity)
+    {
+    case 1:
+        answer = '1';
+        break;
+    case 2:
+        answer = '2';
+        break;
+    case 3:
+        answer = '3';
+        break;
+    case 4:
+        answer = '4';
+        break;
+    default:
+        break;
+    }
+
+    return answer;
+
 }
 
 bool search_item(Player *player, int item)
