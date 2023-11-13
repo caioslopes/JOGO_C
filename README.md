@@ -13,7 +13,7 @@ O projeto é de autoria do grupo, sendo inspirado em jogos antigos.
 ## O Jogo
 Baseado nos backrooms, Não olhe para trás, traz um pedaço desse universo creepy através de uma experiencia imersiva de terror psicologico, no qual é trabalado o medo através dos sons e isolamento.
 
-A experiencia é baseado num pseudo-monstro que te persegue durante todo o jogo e seu objetio é escapar do saguão principal procurando a chave que abre a saída.
+A experiência é baseada num pseudo-monstro que te persegue durante todo o jogo e seu objetivo é escapar do saguão principal procurando a chave que abre a saída.
 
 Mapa do jogo - 12/11/2023
 ![](https://i.imgur.com/sxEO56a.png)
