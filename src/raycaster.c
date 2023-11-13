@@ -165,8 +165,8 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
 
     // Sounds
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    Mix_Music *soundtrack = Mix_LoadMUS("../sounds/teste-track-mp3.mp3");
-    Mix_Chunk *kick = Mix_LoadWAV("../sounds/kick.wav");
+    Mix_Music *soundtrack = Mix_LoadMUS("../sounds/song-low.mp3");
+    Mix_Chunk *step = Mix_LoadWAV("../sounds/step-one.wav");
     Mix_PlayMusic(soundtrack, -1);
 
     /* FPS */
@@ -184,7 +184,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
             perform_dda(rc, *map);
             calc_wall_height(rc);
             draw_vert_line(*map, sdl, rc, x);
-            move_player(*map, *key, rc, *player, *queue, x);
+            move_player(*map, *key, rc, *player, *queue, x, *monster);
 
             if (get_size(*queue) == START_WALKING)
             {
@@ -198,7 +198,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
                 if (timer >= 100000)
                 {
                     m_walk(queue, *monster);
-                    Mix_PlayChannel(-1, kick, 0);
+                    Mix_PlayChannel(-1, step, 0);
                     timer = 0;
                 }
                 if (is_empty(*queue))
@@ -216,7 +216,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
         {
             done = SDL_TRUE;
             Mix_FreeMusic(soundtrack);
-            Mix_FreeChunk(kick);
+            Mix_FreeChunk(step);
             Mix_CloseAudio();
         }
         frameTime = SDL_GetTicks() - frameStart;
@@ -224,5 +224,221 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
         {
             SDL_Delay(frameDelay - frameTime);
         }
+    }
+}
+
+void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue queue, int ray, Monster monster)
+{
+    if (get_is_alive(player))
+    {
+
+        double oldDirX;
+        double oldPlaneX;
+
+        if (get_w(key) == 1)
+        {
+
+            /* Get Item */
+            if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) > 82 && get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) < 87)
+            {
+                get_item(&player, get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)), map);
+            }
+            if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) > 82 && get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) < 87)
+            {
+                get_item(&player, get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)), map);
+            }
+
+            /* Change Map*/
+            if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0)
+            {
+                change_map(get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)), &map, rc, key, player, &monster, queue);
+            }
+            if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0)
+            {
+                change_map(get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)), &map, rc, key, player, &monster, queue);
+            }
+
+            int x, y;
+            x = (int)(rc->player_pos_x);
+            y = (int)(rc->player_pos_y);
+
+            if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0 /* && !is_collided(map, rc, ray) */)
+            {                                                    // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
+                rc->player_pos_x += rc->player_dir_x * MV_SPEED; // incrementa a posição do player no eixo X
+            }
+            if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) == 0 /* && !is_collided(map, rc, ray) */)
+            {                                                    // verifica se aonde o player está é uma posição de valor 0 (sem parede) no mapa
+                rc->player_pos_y += rc->player_dir_y * MV_SPEED; // incrementa a posição do player no eixo Y
+            }
+
+            if (x != (int)(rc->player_pos_x) || y != (int)(rc->player_pos_y))
+            {
+                printf("%s\n", enqueue(queue, 1) ? "OK" : "ERRO");
+            }
+        }
+
+        if (get_a(key) == 1)
+        {
+            oldDirX = rc->player_dir_x;
+            rc->player_dir_x = rc->player_dir_x * cos(ROT_SPEED) - rc->player_dir_y * sin(ROT_SPEED);
+            rc->player_dir_y = oldDirX * sin(ROT_SPEED) + rc->player_dir_y * cos(ROT_SPEED);
+            oldPlaneX = rc->player_plane_x;
+            rc->player_plane_x = rc->player_plane_x * cos(ROT_SPEED) - rc->player_plane_y * sin(ROT_SPEED);
+            rc->player_plane_y = oldPlaneX * sin(ROT_SPEED) + rc->player_plane_y * cos(ROT_SPEED);
+        }
+
+        if (get_s(key) == 1)
+        {
+            if (get_value_of(map, (int)(rc->player_pos_x - rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) == 0)
+            {
+                rc->player_pos_x -= rc->player_dir_x * MV_SPEED;
+            }
+            if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y - rc->player_dir_y * MV_SPEED)) == 0)
+            {
+                rc->player_pos_y -= rc->player_dir_y * MV_SPEED;
+            }
+        }
+
+        if (get_d(key) == 1)
+        {
+            oldDirX = rc->player_dir_x;
+            rc->player_dir_x = rc->player_dir_x * cos(-ROT_SPEED) - rc->player_dir_y * sin(-ROT_SPEED);
+            rc->player_dir_y = oldDirX * sin(-ROT_SPEED) + rc->player_dir_y * cos(-ROT_SPEED);
+            oldPlaneX = rc->player_plane_x;
+            rc->player_plane_x = rc->player_plane_x * cos(-ROT_SPEED) - rc->player_plane_y * sin(-ROT_SPEED);
+            rc->player_plane_y = oldPlaneX * sin(-ROT_SPEED) + rc->player_plane_y * cos(-ROT_SPEED);
+        }
+    }
+}
+
+void change_map(int door, Map *map, t_raycaster *rc, ButtonKeys key, Player player, Monster *monster, Queue queue)
+{
+    Mix_Chunk *doorAudio = Mix_LoadWAV("../sounds/open-door.wav");
+    switch (door)
+    {
+    case 12:
+        if (get_e(key) == 1)
+        {
+            Mix_PlayChannel(-1, doorAudio, 0);
+            generate_map(map, first_room);
+            rc->player_pos_x = 19;
+            rc->player_pos_y = 22;
+            m_jump(&queue, JUMP);
+        }
+        break;
+    case 21:
+        if (get_e(key) == 1)
+        {
+            Mix_PlayChannel(-1, doorAudio, 0);
+            generate_map(map, main_room);
+            rc->player_pos_x = 7;
+            rc->player_pos_y = 11;
+            m_jump(&queue, JUMP);
+        }
+        break;
+    case 13:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 83))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, second_room);
+                rc->player_pos_x = 19;
+                rc->player_pos_y = 2;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
+    case 31:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 83))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, main_room);
+                rc->player_pos_x = 7;
+                rc->player_pos_y = 12;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
+    case 14:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 84))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, third_room);
+                rc->player_pos_x = 4;
+                rc->player_pos_y = 2;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
+    case 41:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 84))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, main_room);
+                rc->player_pos_x = 15;
+                rc->player_pos_y = 12;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
+    case 15:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 85))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, fourth_room);
+                rc->player_pos_x = 4;
+                rc->player_pos_y = 22;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
+    case 51:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 85))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, main_room);
+                rc->player_pos_x = 15;
+                rc->player_pos_y = 11;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
+    case 16:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 86))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, final_room);
+                rc->player_pos_x = 22;
+                rc->player_pos_y = 11;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
+    case 61:
+        if (get_e(key) == 1)
+        {
+            if (search_item(&player, 86))
+            {
+                Mix_PlayChannel(-1, doorAudio, 0);
+                generate_map(map, main_room);
+                rc->player_pos_x = 2;
+                rc->player_pos_y = 11;
+                m_jump(&queue, JUMP);
+            }
+        }
+        break;
     }
 }

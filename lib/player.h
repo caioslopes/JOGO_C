@@ -13,6 +13,8 @@ void init_pocket(Player *player);
 
 void set_is_alive(Player *player, bool status);
 
+bool get_is_alive(Player player);
+
 void get_item(Player *player, int item, Map map);
 
 bool search_item(Player *player, int item);
@@ -22,7 +24,3 @@ bool pocket_is_full(Player *player);
 bool pocket_is_empty(Player *player);
 
 bool is_collided(Map map, t_raycaster *rc, int ray);
-
-void move_player(Map map, ButtonKeys key, t_raycaster* rc, Player player, Queue queue, int ray);
-
-void change_map(int door, Map *map, t_raycaster *rc, ButtonKeys key, Player player);

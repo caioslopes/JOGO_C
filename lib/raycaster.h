@@ -16,6 +16,9 @@
 #define MV_SPEED 0.00005
 #define ROT_SPEED 0.00001745
 
+#define texWidth 64
+#define texHeight 64
+
 // Structures
 typedef struct s_sdl{
   SDL_Window *window;
@@ -58,5 +61,7 @@ void calc_wall_height(t_raycaster *rc);
 void draw_vert_line(Map map, t_sdl *sdl, t_raycaster *rc, int x);
 void render_frame(t_sdl *sdl);
 void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys *key, Queue *queue, Monster *monster);
+void move_player(Map map, ButtonKeys key, t_raycaster* rc, Player player, Queue queue, int ray, Monster monster);
+void change_map(int door, Map *map, t_raycaster *rc, ButtonKeys key, Player player, Monster *monster, Queue queue);
 
 #endif
