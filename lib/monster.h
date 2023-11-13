@@ -3,7 +3,7 @@
 #include "player.h"
 
 #define START_WALKING 10
-#define JUMP 5
+#define JUMP 4
 
 typedef struct monster* Monster;
 

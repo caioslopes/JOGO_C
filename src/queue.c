@@ -43,7 +43,7 @@ bool enqueue(Queue queue, int new_element){
 }
 
 int dequeue(Queue queue){
-    int answer;
+    int answer = 0;
     if(!is_empty(queue)){
         if(queue->first == QUEUE_MAX_SIZE - 1){
             queue->first = 0;
