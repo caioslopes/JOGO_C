@@ -17,6 +17,10 @@ bool get_is_alive(Player player);
 
 void get_item(Player *player, int item, Map map, Mix_Chunk *getkeys);
 
+void add_key_quantity(Player *player, int key);
+
+char get_key_quantity(Player *player);
+
 bool search_item(Player *player, int item);
 
 bool pocket_is_full(Player *player);
