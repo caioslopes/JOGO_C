@@ -1,7 +1,4 @@
-##
-## C/SDL2 Raycaster Makefile
-##
-
+## Variables for Linux Mint
 SRC		=	./src/raycaster.c	\
 			./src/color.c	\
 			./src/map.c		\
@@ -22,6 +19,22 @@ CFLAGS	=	-O2 -W -Wall -Wextra -Werror
 CFLAGS	+=	-I./lib/
 
 LDLIBS	=	-lSDL2 -lSDL2_mixer -lm
+
+## Variables for macOs
+OBJECT 	=  ./src/*.c
+
+CLANG	= 	clang
+
+LIBRARY_PATH	= 	-I./lib
+LIBRARY_PATH	+=  -I/Library/Frameworks/SDL2.framework/Headers
+LIBRARY_PATH	+=  -F/Library/Frameworks -framework SDL2
+LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_mixer.framework/Headers
+LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_mixer
+
+RPATH 	= 	-rpath /Library/Frameworks
+
+macos	: 	$(OBJECT)
+			$(CLANG) $(OBJECT) $(LIBRARY_PATH) -o $(NAME) $(RPATH)
 
 all		:	$(NAME)
 
