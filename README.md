@@ -21,8 +21,8 @@ Mapa do jogo - 12/11/2023
 Estágio grafico - 12/11/2023
 ![](https://i.imgur.com/h7fsl5X.png)
 
-Video grafico
-![](https://i.imgur.com/FGJIoRc.mp4)
+Gif movimentação em jogo - 13/11/2023
+![](https://i.imgur.com/HxThV9w.gifv)
 
 ## Estrutura e Estratégia
 - Monstro
