@@ -165,7 +165,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
 
     // Sounds
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    Mix_Music *soundtrack = Mix_LoadMUS("sounds/song-low.mp3");
+    Mix_Music *soundtrack = Mix_LoadMUS("sounds/soundtrack.mp3");
     Mix_Chunk *step = Mix_LoadWAV("sounds/step-one.wav");
     Mix_Chunk *doorAudio = Mix_LoadWAV("sounds/open-door.wav");
     Mix_Chunk *getKeys = Mix_LoadWAV("sounds/keys.wav");
