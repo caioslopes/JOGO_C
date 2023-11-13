@@ -39,7 +39,7 @@ Gif Estágio grafico - 12/11/2023
    gutsserrano@gmail.com
 
 - Caio dos Santos Lopes
-  lopes.caio@aluno.ifsp.edu.br
+  caiolopes.social@gmail.com
 
 - Eduardo Pires Carvalho
   epc4129@gmail.com
