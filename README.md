@@ -18,10 +18,7 @@ A experiência é baseada num pseudo-monstro que te persegue durante todo o jogo
 Mapa do jogo - 12/11/2023
 ![](https://i.imgur.com/sxEO56a.png)
 
-Estágio grafico - 12/11/2023
-![](https://i.imgur.com/h7fsl5X.png)
-
-Gif movimentação em jogo - 13/11/2023
+Gif Estágio grafico - 12/11/2023
 ![](https://i.imgur.com/HxThV9w.gif)
 
 ## Estrutura e Estratégia
