@@ -11,7 +11,7 @@ O projeto é um trabalho (desafio) passado pelo professor Ednilson Geraldo Rossi
 O projeto é de autoria do grupo, sendo inspirado em jogos antigos.
 
 ## O Jogo
-Baseado nos backrooms, Não olhe para trás, traz um pedaço desse universo creepy através de uma experiencia imersiva de terror psicologico, no qual é trabalado o medo através dos sons e isolamento.
+Baseado nos backrooms, Não olhe para trás, traz um pedaço desse universo creepy através de uma experiencia imersiva de terror psicologico, no qual é trabalhado o medo através dos sons.
 
 A experiência é baseada num pseudo-monstro que te persegue durante todo o jogo e seu objetivo é escapar do saguão principal procurando a chave que abre a saída.
 
