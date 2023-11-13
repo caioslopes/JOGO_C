@@ -167,6 +167,8 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     Mix_Music *soundtrack = Mix_LoadMUS("../sounds/song-low.mp3");
     Mix_Chunk *step = Mix_LoadWAV("../sounds/step-one.wav");
+    Mix_Chunk *doorAudio = Mix_LoadWAV("../sounds/open-door.wav");
+    Mix_Chunk *getKeys = Mix_LoadWAV("../sounds/keys.wav");
     Mix_PlayMusic(soundtrack, -1);
 
     /* FPS */
@@ -184,7 +186,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
             perform_dda(rc, *map);
             calc_wall_height(rc);
             draw_vert_line(*map, sdl, rc, x);
-            move_player(*map, *key, rc, *player, *queue, x, *monster);
+            move_player(*map, *key, rc, *player, *queue, x, *monster, doorAudio, getKeys);
 
             if (get_size(*queue) == START_WALKING)
             {
@@ -195,7 +197,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
 
             if (is_walking(*monster))
             {
-                if (timer >= 100000)
+                if (timer >= 60000)
                 {
                     m_walk(queue, *monster);
                     Mix_PlayChannel(-1, step, 0);
@@ -217,6 +219,8 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
             done = SDL_TRUE;
             Mix_FreeMusic(soundtrack);
             Mix_FreeChunk(step);
+            Mix_FreeChunk(doorAudio);
+            Mix_FreeChunk(getKeys);
             Mix_CloseAudio();
         }
         frameTime = SDL_GetTicks() - frameStart;
@@ -227,7 +231,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
     }
 }
 
-void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue queue, int ray, Monster monster)
+void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue queue, int ray, Monster monster, Mix_Chunk *doorAudio, Mix_Chunk *getkeys)
 {
     if (get_is_alive(player))
     {
@@ -241,21 +245,21 @@ void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue 
             /* Get Item */
             if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) > 82 && get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) < 87)
             {
-                get_item(&player, get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)), map);
+                get_item(&player, get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)), map, getkeys);
             }
             if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) > 82 && get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) < 87)
             {
-                get_item(&player, get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)), map);
+                get_item(&player, get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)), map, getkeys);
             }
 
             /* Change Map*/
             if (get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)) != 0)
             {
-                change_map(get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)), &map, rc, key, player, &monster, queue);
+                change_map(get_value_of(map, (int)(rc->player_pos_x + rc->player_dir_x * MV_SPEED), (int)(rc->player_pos_y)), &map, rc, key, player, &monster, queue, doorAudio);
             }
             if (get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)) != 0)
             {
-                change_map(get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)), &map, rc, key, player, &monster, queue);
+                change_map(get_value_of(map, (int)(rc->player_pos_x), (int)(rc->player_pos_y + rc->player_dir_y * MV_SPEED)), &map, rc, key, player, &monster, queue, doorAudio);
             }
 
             int x, y;
@@ -311,9 +315,8 @@ void move_player(Map map, ButtonKeys key, t_raycaster *rc, Player player, Queue 
     }
 }
 
-void change_map(int door, Map *map, t_raycaster *rc, ButtonKeys key, Player player, Monster *monster, Queue queue)
+void change_map(int door, Map *map, t_raycaster *rc, ButtonKeys key, Player player, Monster *monster, Queue queue, Mix_Chunk *doorAudio)
 {
-    Mix_Chunk *doorAudio = Mix_LoadWAV("../sounds/open-door.wav");
     switch (door)
     {
     case 12:

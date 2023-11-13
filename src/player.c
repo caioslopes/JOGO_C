@@ -39,9 +39,8 @@ void init_pocket(Player *player)
     }
 }
 
-void get_item(Player *player, int item, Map map)
+void get_item(Player *player, int item, Map map, Mix_Chunk *getkeys)
 {
-    Mix_Chunk *getKeys = Mix_LoadWAV("../sounds/keys.wav");
     if (!pocket_is_full(player))
     {
         if (item > 82 && item < 87)
@@ -51,7 +50,7 @@ void get_item(Player *player, int item, Map map)
                 (*player)->i_pocket += 1;
                 (*player)->pocket[(*player)->i_pocket] = item;
                 printf("Pegou o item: %d\n", (*player)->pocket[(*player)->i_pocket]);
-                Mix_PlayChannel(-1, getKeys, 0);
+                Mix_PlayChannel(-1, getkeys, 0);
                 switch (item)
                 {
                 case 83:

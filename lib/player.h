@@ -15,7 +15,7 @@ void set_is_alive(Player *player, bool status);
 
 bool get_is_alive(Player player);
 
-void get_item(Player *player, int item, Map map);
+void get_item(Player *player, int item, Map map, Mix_Chunk *getkeys);
 
 bool search_item(Player *player, int item);
 

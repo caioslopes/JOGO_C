@@ -10,7 +10,7 @@ SRC		=	./src/raycaster.c	\
 			./src/monster.c  \
 			./src/queue.c   
 
-NAME	=	raycaster
+NAME	=	game_exec
 
 CC		=	gcc
 
