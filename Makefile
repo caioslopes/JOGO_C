@@ -30,6 +30,8 @@ LIBRARY_PATH	+=  -I/Library/Frameworks/SDL2.framework/Headers
 LIBRARY_PATH	+=  -F/Library/Frameworks -framework SDL2
 LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_mixer.framework/Headers
 LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_mixer
+LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_ttf.framework/Headers
+LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_ttf
 
 RPATH 	= 	-rpath /Library/Frameworks
 
