@@ -57,7 +57,6 @@ int init(t_sdl *sdl, t_raycaster *rc)
         return (-1);
     }
 
-    	
     TTF_Init();
 
     return (0);
@@ -230,7 +229,7 @@ void raycaster(t_sdl *sdl, t_raycaster *rc, Map *map, Player *player, ButtonKeys
 
         }
         
-        char text[10] = "Chaves: "; //+ get_key_quantity(player); 
+        char text[10] = "Chaves: ";
         text[8] += get_key_quantity(player);
         text[9] += '\0';
 

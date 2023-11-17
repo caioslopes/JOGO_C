@@ -1,54 +1,48 @@
-## Variables for Linux Mint
-SRC		=	./src/raycaster.c	\
-			./src/color.c	\
-			./src/map.c		\
-			./src/buttons.c \
-			./src/player.c  \
-			./src/monster.c  \
-			./src/queue.c   
+#Makefile compiler
 
-NAME	=	game_exec
+SOURCE = 	./src/app.c \
+			./src/color.c \
+			./src/map.c \
+			./src/render.c \
+			./src/all.c \
+			./src/bricks.c \
+			./src/sprites.c \
 
-CC		=	gcc
+SRC = ./src/*.c
 
-RM		=	rm -f
+NAME = exec
 
-OBJ		=	$(SRC:.c=.o)
+CC = gcc
 
+RM = rm -f
+
+OBJ = $(SOURCE:.c=.o)
+
+#Flags and Library on Linux
 CFLAGS	=	-O2 -W -Wall -Wextra -Werror
-CFLAGS	+=	-I./lib/
+CFLAGS	+=	-I./hds/
 
-LDLIBS	=	-lSDL2 -lSDL2_mixer -lSDL2_ttf -lm
+LDLIBS	=	-lSDL2 -lm
 
-## Variables for macOs
-OBJECT 	=  ./src/*.c
-
-CLANG	= 	clang
-
+#Folder localy
 LIBRARY_PATH	= 	-I./lib
+
+#Library Path on macOs (Apple Silicon - Sonoma)
 LIBRARY_PATH	+=  -I/Library/Frameworks/SDL2.framework/Headers
 LIBRARY_PATH	+=  -F/Library/Frameworks -framework SDL2
-LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_mixer.framework/Headers
-LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_mixer
-LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_ttf.framework/Headers
-LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_ttf
+
+#LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_mixer.framework/Headers
+#LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_mixer
+#LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_ttf.framework/Headers
+#LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_ttf
 
 RPATH 	= 	-rpath /Library/Frameworks
 
-macos	: 	$(OBJECT)
-			$(CLANG) $(OBJECT) $(LIBRARY_PATH) -o $(NAME) $(RPATH)
+macos	: 	$(SRC)
+			$(CC) $(SRC) $(LIBRARY_PATH) -o $(NAME) $(RPATH)
 
-all		:	$(NAME)
-
-$(NAME)	:	$(OBJ)
+linux	: 	$(OBJ)
 			$(CC) -o $(NAME) $(OBJ) $(LDLIBS)
 
 clean	:
 			$(RM) $(OBJ)
-
-fclean	:	clean
-			$(RM) $(NAME)
-
-re		:	fclean all
-
-.PHONY	:	all clean fclean re

@@ -52,9 +52,7 @@ Mkfile.old
 dkms.conf
 
 #Executável
-raycaster
+exec
 
 #Arquivo para Mac
 .DS_store
-src/buttons.o
-src/main.o
