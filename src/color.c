@@ -1,4 +1,4 @@
-#include "render.h"
+#include "game.h"
 
 SDL_Color convert_color(int hexa_value){
     SDL_Color color;
