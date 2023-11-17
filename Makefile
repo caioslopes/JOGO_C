@@ -20,7 +20,7 @@ OBJ = $(SOURCE:.c=.o)
 
 #Flags and Library on Linux
 CFLAGS	=	-O2 -W -Wall -Wextra -Werror
-CFLAGS	+=	-I./hds/
+CFLAGS	+=	-I./lib/
 
 LDLIBS	=	-lSDL2 -lm
 
