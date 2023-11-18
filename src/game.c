@@ -1,4 +1,4 @@
-#include "game.h"
+#include "../lib/game.h"
 
 /******************
 * APPLICATION
@@ -235,6 +235,7 @@ void draw_point(Raycaster *rc, int x, SDL_Renderer *renderer){
         SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawPoint(renderer, x, y);
     }
+
 }
 
 void render_frame(SDL_Renderer *renderer)

@@ -1,4 +1,4 @@
-#include "buttons.h"
+#include "../lib/buttons.h"
 
 struct keys{
     int w;

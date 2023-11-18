@@ -1,4 +1,4 @@
-#include "game.h"
+#include "../lib/game.h"
 
 int sprites[]=
 {

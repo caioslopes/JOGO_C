@@ -1,4 +1,4 @@
-#include "game.h"
+#include "../lib/map.h"
 
 int worldMap[MAPWIDTH][MAPHEIGHT]={
   {1,1,1,1,1,1,1,1,1,1,1,16,16,1,1,1,1,1,1,1,1,1,1,1},
