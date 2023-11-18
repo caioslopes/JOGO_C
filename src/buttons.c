@@ -86,3 +86,9 @@ int get_s(ButtonKeys key){ return key->s; }
 int get_e(ButtonKeys key){ return key->e; }
 
 int get_esc(ButtonKeys key){ return key->esc; }
+
+void close_buttons(ButtonKeys *keys){
+    if(keys != NULL){
+        free(*keys);
+    }
+}

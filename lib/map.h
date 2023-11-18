@@ -7,6 +7,22 @@
 #define MAPWIDTH 24
 #define MAPHEIGHT 24
 
-extern int worldMap[MAPWIDTH][MAPHEIGHT];
+extern int main_room[MAPWIDTH][MAPHEIGHT];
+extern int second_room[MAPWIDTH][MAPHEIGHT];
+extern int third_room[MAPWIDTH][MAPHEIGHT];
+extern int fourth_room[MAPWIDTH][MAPHEIGHT];
+extern int fifth_room[MAPWIDTH][MAPHEIGHT];
+
+typedef struct map* Map;
+
+void init_map(Map *map);
+
+void generate_map(Map *map, int room[][MAPHEIGHT]);
+
+void clear_item(Map map/* , int room[][MAPHEIGHT] */);
+
+int on_map(Map map, int x, int y);
+
+void close_map(Map *map);
 
 #endif

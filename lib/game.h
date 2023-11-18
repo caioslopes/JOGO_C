@@ -5,6 +5,10 @@
 #include "utils.h"
 #include "buttons.h"
 #include "map.h"
+#include "player.h"
+#include "queue.h"
+#include "monster.h"
+#include "sounds.h"
 
 /******************
 * APPLICATION
@@ -23,9 +27,11 @@ typedef struct game* Game;
 
 void init_game(Game *game);
 
-/* void change_state();
+void game_running(Game game);
 
-void quit_aplication(); */
+/* void change_state(); */
+
+void quit_aplication(Game *game);
 
 /******************
 * RAYCASTER
@@ -55,11 +61,14 @@ typedef struct raycaster* Raycaster;
 void init_raycaster(Raycaster *rc);
 void starting_values(Raycaster *rc);
 void calculating(Raycaster *rc, int w);
-void dda(Raycaster *rc);
+void dda(Raycaster *rc, Map *map);
 int calc_wall_height(Raycaster *rc);
 void draw_point(Raycaster *rc, int x, SDL_Renderer *renderer);
 void render_frame(SDL_Renderer  *renderer);
-int moviment(Raycaster *rc, ButtonKeys keys);
+int moviment_event(Raycaster *rc, Game *game);
+void change_map_event(Game *game, int door);
+void changing_map(Game *game, int room[][MAPHEIGHT], int x, int y);
 void render_loop(Raycaster *rc, Game *game);
+void close_raycaster(Raycaster *rc);
 
 #endif

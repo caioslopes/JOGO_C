@@ -1,10 +1,30 @@
-#include "queue.h"
+#include "../lib/queue.h"
+
+struct element{
+    int x;
+    int y;
+};
 
 struct queue{
-    int items[QUEUE_MAX_SIZE];
+    Element items[QUEUE_MAX_SIZE];
     int last, first, size;
 };
 
+void init_element(Element *element){
+    Element e;
+    e = malloc(sizeof(struct element));
+    e->x = 0;
+    e->y = 0;
+
+    if(element != NULL){
+        *element = e;
+    }
+}
+
+void update_element(Element element, int x, int y){
+    element->x = x;
+    element->y = y;
+}
 
 void init_queue(Queue* queue){
     Queue q;
@@ -12,7 +32,14 @@ void init_queue(Queue* queue){
     q->last = -1;
     q->first = -1;
     q->size = 0;
-    *queue = q;
+
+    if(queue != NULL){
+        *queue = q;
+    }
+}
+
+int get_size(Queue queue){
+    return queue->size;
 }
 
 bool is_full(Queue queue){
@@ -23,11 +50,7 @@ bool is_empty(Queue queue){
     return queue->size == 0;
 }
 
-int get_size(Queue queue){
-    return queue->size;
-}
-
-bool enqueue(Queue queue, int new_element){
+bool enqueue(Queue queue, Element new_element){
     bool answer = false;
     if(! is_full(queue)){
         if(queue->last == QUEUE_MAX_SIZE - 1){
@@ -42,8 +65,8 @@ bool enqueue(Queue queue, int new_element){
     return answer;
 }
 
-int dequeue(Queue queue){
-    int answer = 0;
+Element dequeue(Queue queue){
+    Element answer;
     if(!is_empty(queue)){
         if(queue->first == QUEUE_MAX_SIZE - 1){
             queue->first = 0;
@@ -54,4 +77,16 @@ int dequeue(Queue queue){
         answer = queue->items[queue->first];
     }
     return answer;
+}
+
+void close_queue(Queue *queue){
+    if(queue != NULL){
+        free(*queue);
+    }
+}
+
+void close_element(Element *element){
+    if(element != NULL){
+        free(*element);
+    }
 }
