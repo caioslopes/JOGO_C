@@ -2,18 +2,30 @@
 
 struct map{
     int matriz[MAPWIDTH][MAPHEIGHT];
+    int actual_room;
 };
 
 void init_map(Map *map){
     Map m;
     m = malloc(sizeof(struct map));
     generate_map(&m, main_room);
+    m->actual_room = 1;
 
     if(map != NULL){
         *map = m;
     }else{
         printf("Error, & is NULL - Map");
     }
+}
+
+void update_actual_room(Map map, int room){
+    if(room > 0 && room < 6){
+        map->actual_room = room;
+    }
+}
+
+int get_actual_room(Map map){
+    return map->actual_room;
 }
 
 void generate_map(Map *map, int room[][MAPHEIGHT]){
@@ -24,14 +36,32 @@ void generate_map(Map *map, int room[][MAPHEIGHT]){
     }
 }
 
-void clear_item(Map map/* , int room[][MAPHEIGHT] */){
+void clear_item(Map map){
     bool find = false;
     for (int row = 0; row < MAPHEIGHT && find == false; row++){
         for (int column = 0; column < MAPHEIGHT && find == false; column++){
             if (map->matriz[row][column] == 9){
                 map->matriz[row][column] = 0;
-                /* room[row][column] = 0; */
                 find = true;
+                //Cleaning original map
+                switch (map->actual_room){
+                case 1:
+                    main_room[row][column] = 0;
+                    break;
+                case 2:
+                    second_room[row][column] = 0;
+                    break;
+                case 3:
+                    third_room[row][column] = 0;
+                    break;
+                case 4:
+                    fourth_room[row][column] = 0;
+                    break;
+                case 5:
+                    fifth_room[row][column] = 0;
+                    break;
+                }
+
             }
         }
     }
@@ -101,7 +131,8 @@ int second_room[MAPWIDTH][MAPHEIGHT] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    
 
 };
 

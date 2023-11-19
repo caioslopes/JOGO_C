@@ -229,7 +229,24 @@ int calc_wall_height(Raycaster *rc){
     return line_height;
 }
 
-void draw_point(Raycaster *rc, int x, SDL_Renderer *renderer){
+int choosing_texture(Raycaster *rc, Map map){
+    //number of the texture that will be loaded
+    int texNum = on_map(map, (*rc)->map_x, (*rc)->map_y);
+
+    //rendering doors
+    if(texNum > 11 && texNum < 17 || texNum == 21 || texNum == 31 || texNum == 41 || texNum == 51){
+        texNum = 3;
+    }
+
+    //rendering keys
+    if(texNum == 9){
+        texNum = 2;
+    }
+
+    return texNum;
+}
+
+void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
 
     int line_height = calc_wall_height(rc);
 
@@ -262,17 +279,19 @@ void draw_point(Raycaster *rc, int x, SDL_Renderer *renderer){
         line_height = SCREEN_HEIGHT;
     }
 
+    int texNum = choosing_texture(rc, map);
     float ty = ty_off * ty_step;
-    ty += 1;
+    ty += texNum == 1 ? 1 : 32 * texNum; //choosing textures
 
     texX =  (int)((float)texX * (32.0/(float)TILE));
     for(int y = (*rc)->draw_start; y < (*rc)->draw_end; y++){
         
-        int pixel = ((int)(ty)*32+texX) * 3 + (32*32*3);
+        int pixel = ((int)(ty)*32+texX) * 3;
+        int r, g, b;
 
-        int r = all[pixel+0];
-        int g = all[pixel+1];
-        int b = all[pixel+2];
+        r = all[pixel+0];
+        g = all[pixel+1];
+        b = all[pixel+2];
 
         if((*rc)->side == 1){
             r -= 30;
@@ -325,20 +344,24 @@ int moviment_event(Raycaster *rc, Game *game){
             }
 
             //Get item event
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) == 9){
+            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) == 9){                
+                play_chunk((*game)->pick_up_keys);
                 get_item((*game)->player);
                 clear_item((*game)->map);
             }
             if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) == 9){
+                play_chunk((*game)->pick_up_keys);
                 get_item((*game)->player);
                 clear_item((*game)->map);
             }
                 
             //Change map event
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) != 0)
-                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)));
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) != 0)
-                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)));
+            if(get_e((*game)->keys)){
+                if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) != 0)
+                    change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)));
+                if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) != 0)
+                    change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)));
+            }
             
         }
         if (get_s((*game)->keys)){
@@ -380,6 +403,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 1){
             play_chunk((*game)->openning_door);
             changing_map(game, second_room, 19, 22);
+            update_actual_room((*game)->map, 2);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
@@ -389,6 +413,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 1){
             play_chunk((*game)->openning_door);
             changing_map(game, main_room, 7, 11);
+            update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
@@ -398,6 +423,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 2){
             play_chunk((*game)->openning_door);
             changing_map(game, third_room, 19, 2);
+            update_actual_room((*game)->map, 3);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
@@ -407,6 +433,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 2){
             play_chunk((*game)->openning_door);
             changing_map(game, main_room, 7, 12);
+            update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
@@ -416,6 +443,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 3){
             play_chunk((*game)->openning_door);
             changing_map(game, fourth_room, 4, 2);
+            update_actual_room((*game)->map, 4);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }
         else{
@@ -426,6 +454,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 3){
             play_chunk((*game)->openning_door);
             changing_map(game, main_room, 15, 12);
+            update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
@@ -435,6 +464,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 4){
             play_chunk((*game)->openning_door);
             changing_map(game, fifth_room, 4, 22);
+            update_actual_room((*game)->map, 5);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
@@ -444,6 +474,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 4){
             play_chunk((*game)->openning_door);
             changing_map(game, main_room, 15, 11);
+            update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }
         else{
@@ -481,7 +512,7 @@ void render_loop(Raycaster *rc, Game *game){
         for (int x = 0; x < SCREEN_WIDTH; x++){
             calculating(rc, x);
             dda(rc, &(*game)->map);
-            draw_point(rc, x, (*game)->renderer);
+            draw_texture(rc, x, (*game)->renderer, (*game)->map);
         }
 
         render_frame((*game)->renderer);

@@ -17,9 +17,13 @@ typedef struct map* Map;
 
 void init_map(Map *map);
 
+void update_actual_room(Map map, int room);
+
+int get_actual_room(Map map);
+
 void generate_map(Map *map, int room[][MAPHEIGHT]);
 
-void clear_item(Map map/* , int room[][MAPHEIGHT] */);
+void clear_item(Map map);
 
 int on_map(Map map, int x, int y);
 

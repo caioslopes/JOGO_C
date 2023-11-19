@@ -40,6 +40,7 @@ void quit_aplication(Game *game);
 // Texture
 #define TILE 64
 extern int all[];
+extern int sp[];
 
 // Inicial values
 #define INIT_P_POS_X 22
@@ -60,7 +61,8 @@ void starting_values(Raycaster *rc);
 void calculating(Raycaster *rc, int w);
 void dda(Raycaster *rc, Map *map);
 int calc_wall_height(Raycaster *rc);
-void draw_point(Raycaster *rc, int x, SDL_Renderer *renderer);
+int choosing_texture(Raycaster *rc, Map map);
+void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map);
 void render_frame(SDL_Renderer  *renderer);
 int moviment_event(Raycaster *rc, Game *game);
 void change_map_event(Game *game, int door);
