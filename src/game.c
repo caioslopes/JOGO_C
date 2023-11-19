@@ -239,9 +239,9 @@ int choosing_texture(Raycaster *rc, Map map){
     }
 
     //rendering keys
-    if(texNum == 9){
-        texNum = 2;
-    }
+    /* if(texNum == 9){
+        //define number of keys
+    } */
 
     return texNum;
 }
@@ -281,7 +281,11 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
 
     int texNum = choosing_texture(rc, map);
     float ty = ty_off * ty_step;
-    ty += texNum == 1 ? 1 : 32 * texNum; //choosing textures
+    if(texNum == 9){
+        ty += 1;
+    }else{
+        ty += texNum == 1 ? 1 : 32 * texNum; //choosing textures
+    }
 
     texX =  (int)((float)texX * (32.0/(float)TILE));
     for(int y = (*rc)->draw_start; y < (*rc)->draw_end; y++){
@@ -289,9 +293,15 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
         int pixel = ((int)(ty)*32+texX) * 3;
         int r, g, b;
 
-        r = all[pixel+0];
-        g = all[pixel+1];
-        b = all[pixel+2];
+        if(texNum != 9){
+            r = all[pixel+0];
+            g = all[pixel+1];
+            b = all[pixel+2];
+        }else{
+            r = sp[pixel+0];
+            g = sp[pixel+1];
+            b = sp[pixel+2];
+        }
 
         if((*rc)->side == 1){
             r -= 30;
