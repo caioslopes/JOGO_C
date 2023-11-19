@@ -24,6 +24,9 @@ struct game{
     Mix_Chunk *closed_door;
     Mix_Chunk *pick_up_keys;
 
+    //Fonts
+    TTF_Font *font;
+
     //Data
     Raycaster raycaster;
     ButtonKeys keys;
@@ -60,6 +63,9 @@ void init_game(Game *game){
     g->openning_door = Mix_LoadWAV("assets/sounds/openning_door.wav");
     g->pick_up_keys = Mix_LoadWAV("assets/sounds/pick_up_keys.wav");
 
+    //Fonts
+    g->font = TTF_OpenFont("assets/fonts/VCR_OSD_MONO_1.001.ttf", SIZE_FONT);
+
     //Data
     init_raycaster(&g->raycaster);
     init_buttons(&g->keys);
@@ -93,6 +99,9 @@ void quit_aplication(Game *game){
     Mix_FreeChunk((*game)->openning_door);
     Mix_FreeChunk((*game)->pick_up_keys);
     Mix_CloseAudio();
+
+    //Fonts
+    close_font((*game)->font);
 
     //Data
     close_map(&(*game)->map);
@@ -528,6 +537,8 @@ void render_loop(Raycaster *rc, Game *game){
         render_frame((*game)->renderer);
         
         moviment_event(rc, game);
+
+        show_keys((*game)->font, (*game)->renderer, (*game)->player);
 
         //Monster events
         if(timer >= 60){

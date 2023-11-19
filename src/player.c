@@ -37,6 +37,30 @@ int get_qtd_keys(Player player){
     return player->qtd_keys;
 }
 
+char get_qtd_keys_string(Player player){
+    char answer = '0';
+
+    switch (get_qtd_keys(player))
+    {
+    case 1:
+        answer = '1';
+        break;
+    case 2:
+        answer = '2';
+        break;
+    case 3:
+        answer = '3';
+        break;
+    case 4:
+        answer = '4';
+        break;
+    default:
+        break;
+    }
+
+    return answer;
+}
+
 void close_player(Player *player){
     if(player != NULL){
         free(*player);

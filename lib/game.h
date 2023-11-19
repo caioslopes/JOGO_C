@@ -9,6 +9,7 @@
 #include "queue.h"
 #include "monster.h"
 #include "sounds.h"
+#include "fonts.h"
 
 /******************
 * APPLICATION

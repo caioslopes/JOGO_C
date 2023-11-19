@@ -17,6 +17,8 @@ void get_item(Player player);
 
 int get_qtd_keys(Player player);
 
+char get_qtd_keys_string(Player player);
+
 void close_player(Player *player);
 
 #endif

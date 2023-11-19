@@ -25,7 +25,7 @@ OBJ = $(SOURCE:.c=.o)
 CFLAGS	=	-O2 -W -Wall -Wextra -Werror
 CFLAGS	+=	-I./lib/
 
-LDLIBS	=	-lSDL2 -lSDL2_mixer -lm
+LDLIBS	=	-lSDL2 -lSDL2_mixer -lSDL2_ttf -lm
 
 #Folder localy
 LIBRARY_PATH	= 	-I./lib
@@ -35,9 +35,8 @@ LIBRARY_PATH	+=  -I/Library/Frameworks/SDL2.framework/Headers
 LIBRARY_PATH	+=  -F/Library/Frameworks -framework SDL2
 LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_mixer.framework/Headers
 LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_mixer
-
-#LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_ttf.framework/Headers
-#LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_ttf
+LIBRARY_PATH 	+= 	-I/Library/Frameworks/SDL2_ttf.framework/Headers
+LIBRARY_PATH 	+= 	-F/Library/Frameworks -framework SDL2_ttf
 
 RPATH 	= 	-rpath /Library/Frameworks
 
