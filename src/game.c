@@ -64,6 +64,7 @@ void init_game(Game *game){
     g->pick_up_keys = Mix_LoadWAV("assets/sounds/pick_up_keys.wav");
 
     //Fonts
+    TTF_Init();
     g->font = TTF_OpenFont("assets/fonts/VCR_OSD_MONO_1.001.ttf", SIZE_FONT);
 
     //Data
@@ -534,11 +535,11 @@ void render_loop(Raycaster *rc, Game *game){
             draw_texture(rc, x, (*game)->renderer, (*game)->map);
         }
 
+        show_keys((*game)->font, (*game)->renderer, (*game)->player);
+
         render_frame((*game)->renderer);
         
         moviment_event(rc, game);
-
-        show_keys((*game)->font, (*game)->renderer, (*game)->player);
 
         //Monster events
         if(timer >= 60){
