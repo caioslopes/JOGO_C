@@ -16,8 +16,10 @@
 *******************/
 
 // Sreen
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 360
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+#define BUFFER_WIDTH 426
+#define BUFFER_HEIGHT 240
 
 // Frame rate
 #define FRAME_RATE 30

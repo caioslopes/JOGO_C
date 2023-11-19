@@ -47,8 +47,12 @@ void init_game(Game *game){
     // SDL options
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    g->window = SDL_CreateWindow("Não olhe para trás", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+    g->window = SDL_CreateWindow("Não olhe para trás", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
     g->renderer = SDL_CreateRenderer(g->window, -1, SDL_RENDERER_ACCELERATED);
+
+    SDL_SetWindowMinimumSize(g->window, BUFFER_WIDTH, BUFFER_HEIGHT);
+    SDL_RenderSetLogicalSize(g->renderer, BUFFER_WIDTH, BUFFER_HEIGHT);
+    SDL_RenderSetIntegerScale(g->renderer, 1);
 
     // Game options
     g->quit = false;
@@ -165,7 +169,7 @@ void init_raycaster(Raycaster *rc){
 void calculating(Raycaster *rc, int w){
     double camera_x;
 
-    camera_x = 2 * w / (double)(SCREEN_WIDTH)-1;
+    camera_x = 2 * w / (double)(BUFFER_WIDTH)-1;
 
     (*rc)->ray_dir_x = (*rc)->player_dir_x + (*rc)->player_plane_x * camera_x;
     (*rc)->ray_dir_y = (*rc)->player_dir_y + (*rc)->player_plane_y * camera_x;
@@ -223,17 +227,17 @@ int calc_wall_height(Raycaster *rc){
         (*rc)->perp_wall_dist = ((*rc)->map_y - (*rc)->player_pos_y + (1 - (*rc)->step_y) / 2) / (*rc)->ray_dir_y;
     }
 
-    line_height = (int)(SCREEN_HEIGHT / (*rc)->perp_wall_dist);
-    (*rc)->draw_start = -line_height / 2 + SCREEN_HEIGHT / 2;
+    line_height = (int)(BUFFER_HEIGHT / (*rc)->perp_wall_dist);
+    (*rc)->draw_start = -line_height / 2 + BUFFER_HEIGHT / 2;
 
     if ((*rc)->draw_start < 0){
         (*rc)->draw_start = 0;
     }
 
-    (*rc)->draw_end = line_height / 2 + SCREEN_HEIGHT / 2;
+    (*rc)->draw_end = line_height / 2 + BUFFER_HEIGHT / 2;
 
-    if ((*rc)->draw_end >= SCREEN_HEIGHT){
-        (*rc)->draw_end = SCREEN_HEIGHT - 1;
+    if ((*rc)->draw_end >= BUFFER_HEIGHT){
+        (*rc)->draw_end = BUFFER_HEIGHT - 1;
     }
 
     return line_height;
@@ -284,9 +288,9 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
     float ty_step = 31.0/(float)line_height;
     float ty_off = 0;
 
-    if(line_height > SCREEN_HEIGHT){
-        ty_off=(line_height-SCREEN_HEIGHT) / 2.0;
-        line_height = SCREEN_HEIGHT;
+    if(line_height > BUFFER_HEIGHT){
+        ty_off=(line_height-BUFFER_HEIGHT) / 2.0;
+        line_height = BUFFER_HEIGHT;
     }
 
     int texNum = choosing_texture(rc, map);
@@ -529,7 +533,7 @@ void render_loop(Raycaster *rc, Game *game){
         frameStart = SDL_GetTicks();
         timer += 1;
 
-        for (int x = 0; x < SCREEN_WIDTH; x++){
+        for (int x = 0; x < BUFFER_WIDTH; x++){
             calculating(rc, x);
             dda(rc, &(*game)->map);
             draw_texture(rc, x, (*game)->renderer, (*game)->map);
