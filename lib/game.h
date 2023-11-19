@@ -39,10 +39,7 @@ void quit_aplication(Game *game);
 
 // Texture
 #define TILE 64
-extern int brick_texture[];
-extern int BIGSQUARES[];
 extern int all[];
-extern int sprites[];
 
 // Inicial values
 #define INIT_P_POS_X 22
