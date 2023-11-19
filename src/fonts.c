@@ -2,7 +2,7 @@
 
 void show_keys(TTF_Font *font, SDL_Renderer *renderer, Player player){
     SDL_Rect Message_rect; //create a rect
-    SDL_Color White = {255, 255, 255};
+    SDL_Color White = {.r = 255, .g = 255, .b = 255};
     Message_rect.x = 0;  //controls the rect's x coordinate 
     Message_rect.y = 0; // controls the rect's y coordinte
     Message_rect.w = 20; // controls the width of the rect
