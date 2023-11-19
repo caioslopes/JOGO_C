@@ -2,6 +2,7 @@
 
 SOURCE = 	./src/all.c     \
 			./src/buttons.c \
+			./src/fonts.c   \
 			./src/game.c    \
 			./src/main.c    \
 			./src/map.c     \
@@ -9,6 +10,7 @@ SOURCE = 	./src/all.c     \
 			./src/player.c  \
 			./src/queue.c   \
 			./src/sounds.c  \
+			./src/sprites.c
 			
 
 SRC = ./src/*.c

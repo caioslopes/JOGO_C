@@ -243,7 +243,7 @@ int choosing_texture(Raycaster *rc, Map map){
     int texNum = on_map(map, (*rc)->map_x, (*rc)->map_y);
 
     //rendering doors
-    if(texNum > 11 && texNum < 17 || texNum == 21 || texNum == 31 || texNum == 41 || texNum == 51){
+    if((texNum > 11 && texNum < 17) || (texNum == 21 || texNum == 31 || texNum == 41 || texNum == 51)){
         texNum = 3;
     }
 
