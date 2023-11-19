@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "game.h"
 
-#define SIZE_FONT 48
+#define SIZE_FONT 12
 
 void show_keys(TTF_Font *font, SDL_Renderer *renderer, Player player);
 
