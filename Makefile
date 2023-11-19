@@ -1,12 +1,17 @@
 #Makefile compiler
 
-SOURCE = 	./src/app.c \
-			./src/color.c \
-			./src/map.c \
-			./src/render.c \
-			./src/all.c \
-			./src/bricks.c \
-			./src/sprites.c \
+SOURCE = 	./src/all.c     \
+			./src/bricks.c  \
+			./src/buttons.c \
+			./src/game.c    \
+			./src/main.c    \
+			./src/map.c     \
+			./src/monster.c \
+			./src/player.c  \
+			./src/queue.c   \
+			./src/sounds.c  \
+			./src/sprites.c 
+			
 
 SRC = ./src/*.c
 
@@ -22,7 +27,7 @@ OBJ = $(SOURCE:.c=.o)
 CFLAGS	=	-O2 -W -Wall -Wextra -Werror
 CFLAGS	+=	-I./lib/
 
-LDLIBS	=	-lSDL2 -lm
+LDLIBS	=	-lSDL2 -lSDL2_mixer -lm
 
 #Folder localy
 LIBRARY_PATH	= 	-I./lib

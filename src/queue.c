@@ -66,7 +66,7 @@ bool enqueue(Queue queue, Element new_element){
 }
 
 Element dequeue(Queue queue){
-    Element answer;
+    Element answer = NULL;
     if(!is_empty(queue)){
         if(queue->first == QUEUE_MAX_SIZE - 1){
             queue->first = 0;
