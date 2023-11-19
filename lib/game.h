@@ -44,6 +44,7 @@ void quit_aplication(Game *game);
 #define TILE 64
 extern int all[];
 extern int sp[];
+extern int textures[];
 
 // Inicial values
 #define INIT_P_POS_X 22

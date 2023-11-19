@@ -10,7 +10,8 @@ SOURCE = 	./src/all.c     \
 			./src/player.c  \
 			./src/queue.c   \
 			./src/sounds.c  \
-			./src/sprites.c
+			./src/sprites.c \
+			./src/texturas.c
 			
 
 SRC = ./src/*.c

@@ -308,9 +308,9 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
         int r, g, b;
 
         if(texNum != 9){
-            r = all[pixel+0];
-            g = all[pixel+1];
-            b = all[pixel+2];
+            r = textures[pixel+0];
+            g = textures[pixel+1];
+            b = textures[pixel+2];
         }else{
             r = sp[pixel+0];
             g = sp[pixel+1];
