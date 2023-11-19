@@ -65,7 +65,7 @@ void init_game(Game *game){
 
     //Fonts
     TTF_Init();
-    g->font = TTF_OpenFont("assets/fonts/VCR_OSD_MONO_1.001.ttf", SIZE_FONT);
+    g->font = TTF_OpenFont("assets/fonts/VCR_OSD_MONO_1.001.ttf", 128);
 
     //Data
     init_raycaster(&g->raycaster);
