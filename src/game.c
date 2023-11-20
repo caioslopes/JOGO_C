@@ -48,7 +48,7 @@ void init_game(Game *game){
     SDL_Init(SDL_INIT_EVERYTHING);
 
     g->window = SDL_CreateWindow("Não olhe para trás", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
-    g->renderer = SDL_CreateRenderer(g->window, -1, SDL_RENDERER_ACCELERATED);
+    g->renderer = SDL_CreateRenderer(g->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     SDL_SetWindowMinimumSize(g->window, BUFFER_WIDTH, BUFFER_HEIGHT);
     SDL_RenderSetLogicalSize(g->renderer, BUFFER_WIDTH, BUFFER_HEIGHT);
