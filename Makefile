@@ -47,6 +47,9 @@ macos	: 	$(SRC)
 
 linux	: 	$(OBJ)
 			$(CC) -o $(NAME) $(OBJ) $(LDLIBS)
+			
+#copy this code in terminal (for windows)
+windows :   gcc -std=c99 -o exec.exe ./src/*c -I ./SDL2/include -L ./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -mwindows
 
 clean	:
 			$(RM) $(OBJ)
