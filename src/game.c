@@ -248,23 +248,13 @@ int choosing_texture(Raycaster *rc, Map map){
     int texNum = on_map(map, (*rc)->map_x, (*rc)->map_y);
 
     //rendering doors
-    if((texNum > 11 && texNum < 16) || (texNum == 21 || texNum == 31 || texNum == 41 || texNum == 51)){
-        texNum = 4;
-    }
-
-    if(texNum == 16){
-        texNum = 5;
-    }
-
-    if(texNum == 17){
-        texNum = 6;
-    }
+    if((texNum > 11 && texNum < 16) || (texNum == 21 || texNum == 31 || texNum == 41 || texNum == 51)){ texNum = 5; }
+    if(texNum == 16){ texNum = 6; }
+    if(texNum == 17){ texNum = 7; }
     
-
     //rendering keys
-    if(texNum == 9){
-        texNum = 7;
-    }
+    if(texNum == 9){ texNum = 8; }
+    if(texNum == 10){ texNum = 9; }
 
     return texNum;
 }
@@ -304,8 +294,8 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
 
     int texNum = choosing_texture(rc, map);
     float ty = ty_off * ty_step;
-    
-    ty += texNum == 1 ? 1 : 32 * texNum; //choosing textures
+
+    ty += (texNum - 1) * 32; //choosing textures
 
     texX =  (int)((float)texX * (32.0/(float)TILE));
     for(int y = (*rc)->draw_start; y < (*rc)->draw_end; y++){
@@ -323,9 +313,9 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
             b -= 30;
         }
 
-        r -= (int)((*rc)->perp_wall_dist * 9);
-        g -= (int)((*rc)->perp_wall_dist * 9);
-        b -= (int)((*rc)->perp_wall_dist * 9);
+        r -= (int)((*rc)->perp_wall_dist * 6);
+        g -= (int)((*rc)->perp_wall_dist * 6);
+        b -= (int)((*rc)->perp_wall_dist * 6);
 
         if (r < 0){ r = 0; }
         if (g < 0){ g = 0; }
@@ -345,7 +335,7 @@ void render_frame(SDL_Renderer *renderer){
     SDL_RenderClear(renderer);
 }
 
-int moviment_event(Raycaster *rc, Game *game){
+int handle_event(Raycaster *rc, Game *game){
     double oldDirX;
     double oldPlaneX;
 
@@ -356,9 +346,9 @@ int moviment_event(Raycaster *rc, Game *game){
             x = (int)((*rc)->player_pos_x);
             y = (int)((*rc)->player_pos_y);
 
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) == 0)
+            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) <= 0)
                 (*rc)->player_pos_x += (*rc)->player_dir_x * MV_SPEED;
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) == 0)
+            if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) <= 0)
                 (*rc)->player_pos_y += (*rc)->player_dir_y * MV_SPEED;
 
             //Enqueue
@@ -369,9 +359,9 @@ int moviment_event(Raycaster *rc, Game *game){
         }
 
         if (get_s((*game)->keys)){
-            if (on_map((*game)->map,(int)((*rc)->player_pos_x - (*rc)->player_dir_x * MV_SPEED), (int)((*rc)->player_pos_y)) == 0)
+            if (on_map((*game)->map,(int)((*rc)->player_pos_x - (*rc)->player_dir_x * MV_SPEED), (int)((*rc)->player_pos_y)) <= 0)
                 (*rc)->player_pos_x -= (*rc)->player_dir_x * MV_SPEED;
-            if (on_map((*game)->map,(int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y - (*rc)->player_dir_y * MV_SPEED)) == 0)
+            if (on_map((*game)->map,(int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y - (*rc)->player_dir_y * MV_SPEED)) <= 0)
                 (*rc)->player_pos_y -= (*rc)->player_dir_y * MV_SPEED;
         }
 
@@ -394,17 +384,15 @@ int moviment_event(Raycaster *rc, Game *game){
         }
 
         //Get item event
-        if(get_e((*game)->keys)){
-            if (on_map((*game)->map, (int)( (*rc)->player_pos_x + ( (*rc)->player_dir_x ) * MV_SPEED ), (int)( (*rc)->player_pos_y)) == 9){                
-                play_chunk((*game)->pick_up_keys);
-                get_item((*game)->player);
-                clear_item((*game)->map);
-            }
-            if (on_map((*game)->map, (int)( (*rc)->player_pos_x ), (int)( (*rc)->player_pos_y + ( (*rc)->player_dir_y ) * MV_SPEED )) == 9){
-                play_chunk((*game)->pick_up_keys);
-                get_item((*game)->player);
-                clear_item((*game)->map);
-            }
+        if (on_map((*game)->map, (int)( (*rc)->player_pos_x + ( (*rc)->player_dir_x ) * MV_SPEED ), (int)( (*rc)->player_pos_y)) == 9){               
+            play_chunk((*game)->pick_up_keys);
+            get_item((*game)->player);
+            clear_item((*game)->map);
+        }
+        if (on_map((*game)->map, (int)( (*rc)->player_pos_x ), (int)( (*rc)->player_pos_y + ( (*rc)->player_dir_y ) * MV_SPEED )) == 9){
+            play_chunk((*game)->pick_up_keys);
+            get_item((*game)->player);
+            clear_item((*game)->map);
         }
 
         //Change map event
@@ -520,6 +508,7 @@ void change_map_event(Game *game, int door){
         break;
     case 17:
         if(get_qtd_keys((*game)->player) >= 5){
+            play_chunk((*game)->openning_door);
             printf("Você escapou!\n");
         }
         else{
@@ -531,9 +520,7 @@ void change_map_event(Game *game, int door){
 
 void render_loop(Raycaster *rc, Game *game){
     
-    // FPS
-    int fps = 60;
-    int frameDelay = 1000 / fps;
+    //Frames
     Uint32 frameStart;
     int frameTime;
 
@@ -552,10 +539,8 @@ void render_loop(Raycaster *rc, Game *game){
         }
 
         show_keys((*game)->font, (*game)->renderer, (*game)->player);
-
         render_frame((*game)->renderer);
-        
-        moviment_event(rc, game);
+        handle_event(rc, game);
 
         //Monster events
         if(timer >= 60){
@@ -567,8 +552,8 @@ void render_loop(Raycaster *rc, Game *game){
             (*game)->quit = true;
 
         frameTime = SDL_GetTicks() - frameStart;
-        if (frameDelay > frameTime)
-            SDL_Delay(frameDelay - frameTime);
+        if (FRAME_DELAY > frameTime)
+            SDL_Delay(FRAME_DELAY - frameTime);
     }
 }
 

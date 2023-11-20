@@ -27,6 +27,8 @@ void clear_item(Map map);
 
 int on_map(Map map, int x, int y);
 
+double on_map_double(Map map, int x, int y);
+
 void close_map(Map *map);
 
 #endif

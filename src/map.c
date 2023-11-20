@@ -41,27 +41,26 @@ void clear_item(Map map){
     for (int row = 0; row < MAPHEIGHT && find == false; row++){
         for (int column = 0; column < MAPHEIGHT && find == false; column++){
             if (map->matriz[row][column] == 9){
-                map->matriz[row][column] = 1;
+                map->matriz[row][column] = 10;
                 find = true;
                 //Cleaning original map
                 switch (map->actual_room){
                 case 1:
-                    main_room[row][column] = 1;
+                    main_room[row][column] = 10;
                     break;
                 case 2:
-                    second_room[row][column] = 1;
+                    second_room[row][column] = 10;
                     break;
                 case 3:
-                    third_room[row][column] = 1;
+                    third_room[row][column] = 10;
                     break;
                 case 4:
-                    fourth_room[row][column] = 1;
+                    fourth_room[row][column] = 10;
                     break;
                 case 5:
-                    fifth_room[row][column] = 1;
+                    fifth_room[row][column] = 10;
                     break;
                 }
-
             }
         }
     }
@@ -127,10 +126,10 @@ int second_room[MAPWIDTH][MAPHEIGHT] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 9, 0, 0, 0, 0, 0, 21},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     
 

@@ -1,7 +1,6 @@
 #Makefile compiler
 
-SOURCE = 	./src/all.c     \
-			./src/buttons.c \
+SOURCE = 	./src/buttons.c \
 			./src/fonts.c   \
 			./src/game.c    \
 			./src/main.c    \
@@ -10,8 +9,7 @@ SOURCE = 	./src/all.c     \
 			./src/player.c  \
 			./src/queue.c   \
 			./src/sounds.c  \
-			./src/sprites.c \
-			./src/texturas.c
+			./src/textures.c
 			
 
 SRC = ./src/*.c

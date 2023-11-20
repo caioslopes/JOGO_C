@@ -22,8 +22,8 @@
 #define BUFFER_HEIGHT 240
 
 // Frame rate
-#define FRAME_RATE 30
-#define FRAME_TIME 1000 / FRAME_RATE
+#define FRAME_RATE 60
+#define FRAME_DELAY 1000 / FRAME_RATE
 
 // Fundamental information about the application
 typedef struct game* Game;
@@ -42,8 +42,6 @@ void quit_aplication(Game *game);
 
 // Texture
 #define TILE 64
-extern int all[];
-extern int sp[];
 extern int textures[];
 
 // Inicial values
@@ -68,7 +66,7 @@ int calc_wall_height(Raycaster *rc);
 int choosing_texture(Raycaster *rc, Map map);
 void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map);
 void render_frame(SDL_Renderer  *renderer);
-int moviment_event(Raycaster *rc, Game *game);
+int handle_event(Raycaster *rc, Game *game);
 void change_map_event(Game *game, int door);
 void changing_map(Game *game, int room[][MAPHEIGHT], int x, int y);
 void render_loop(Raycaster *rc, Game *game);
