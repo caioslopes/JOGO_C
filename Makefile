@@ -9,7 +9,8 @@ SOURCE = 	./src/buttons.c \
 			./src/player.c  \
 			./src/queue.c   \
 			./src/sounds.c  \
-			./src/textures.c
+			./src/textures.c \
+			./src/icon.rc
 			
 
 SRC = ./src/*.c
