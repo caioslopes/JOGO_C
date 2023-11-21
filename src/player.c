@@ -54,8 +54,10 @@ char get_qtd_keys_string(Player player){
     case 4:
         answer = '4';
         break;
-    default:
+    case 5:
+        answer = '5';
         break;
+    
     }
 
     return answer;
