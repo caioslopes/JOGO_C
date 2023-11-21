@@ -5,9 +5,9 @@ void pointer_text(Player player, char retorno[]);
 void show_keys(TTF_Font *font, SDL_Renderer *renderer, Player player){
     SDL_Rect Message_rect; //create a rect
     SDL_Color White = {.r = 255, .g = 255, .b = 255};
-    Message_rect.x = SCREEN_WIDTH - (SIZE_FONT * 78);  //controls the rect's x coordinate 
+    Message_rect.x = BUFFER_WIDTH - (SIZE_FONT * 9);  //controls the rect's x coordinate 
     Message_rect.y = SIZE_FONT - (SIZE_FONT/2); // controls the rect's y coordinte
-    Message_rect.w = SIZE_FONT * 6; // controls the width of the rect
+    Message_rect.w = SIZE_FONT * 8; // controls the width of the rect
     Message_rect.h = SIZE_FONT; // controls the height of the rect*/
 
     char msg[15];

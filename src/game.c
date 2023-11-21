@@ -69,7 +69,7 @@ void init_game(Game *game){
 
     //Fonts
     TTF_Init();
-    g->font = TTF_OpenFont("assets/fonts/VCR_OSD_MONO_1.001.ttf", 128);
+    g->font = TTF_OpenFont("assets/fonts/slkscr.ttf", 128);
 
     //Data
     init_raycaster(&g->raycaster);
@@ -89,7 +89,6 @@ void init_game(Game *game){
 
 void game_running(Game game){
     play_music(game->sound_track);
-    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
     init_raycaster(&game->raycaster);
     render_loop(&game->raycaster, &game);
 }
