@@ -89,6 +89,7 @@ void init_game(Game *game){
 
 void game_running(Game game){
     play_music(game->sound_track);
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
     init_raycaster(&game->raycaster);
     render_loop(&game->raycaster, &game);
 }
@@ -539,7 +540,7 @@ void render_loop(Raycaster *rc, Game *game){
         }
 
         show_keys((*game)->font, (*game)->renderer, (*game)->player);
-        render_frame((*game)->renderer);
+        
         handle_event(rc, game);
 
         //Monster events
@@ -554,6 +555,8 @@ void render_loop(Raycaster *rc, Game *game){
         frameTime = SDL_GetTicks() - frameStart;
         if (FRAME_DELAY > frameTime)
             SDL_Delay(FRAME_DELAY - frameTime);
+
+        render_frame((*game)->renderer);
     }
 }
 

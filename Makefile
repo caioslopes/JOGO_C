@@ -15,7 +15,7 @@ SOURCE = 	./src/buttons.c \
 
 SRC = ./src/*.c
 
-NAME = exec
+NAME = NaoOlhe
 
 CC = gcc
 
