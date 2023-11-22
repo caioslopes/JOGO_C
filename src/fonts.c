@@ -1,7 +1,5 @@
 #include "../lib/fonts.h"
 
-void pointer_text(Player player, char retorno[]);
-
 void show_keys(TTF_Font *font, SDL_Renderer *renderer, Player player){
     SDL_Rect Message_rect; //create a rect
     SDL_Color White = {.r = 255, .g = 255, .b = 255};
