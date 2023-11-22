@@ -343,6 +343,61 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
 
 }
 
+void draw_home(Game *game, int screen_number, double shade){
+
+    int pixel = 0;
+    int r, g, b;
+    printf("entrou\n");
+    //double temp_shade = shade;
+
+    if(screen_number == 1){
+        for(int y = 0; y < BUFFER_HEIGHT; y++){
+            for(int x = 0; x < BUFFER_WIDTH; x++){
+                r = home_screen[pixel + 0]*shade;
+                g = home_screen[pixel + 1]*shade;
+                b = home_screen[pixel + 2]*shade;
+
+                SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
+                SDL_RenderDrawPoint((*game)->renderer, x, y);
+
+                pixel += 3;
+            }
+        }
+    }else{
+        for(int y = 0; y < BUFFER_HEIGHT; y++){
+            for(int x = 0; x < BUFFER_WIDTH; x++){
+
+                //Verifications to apply shading transition just in the background image
+                if(home_screen[pixel + 0] == 0){ 
+                    r = home_screen2[pixel + 0]*shade;
+                }else{
+                    r = home_screen[pixel + 0];
+                }
+                if(home_screen[pixel + 1] == 0){ 
+                    g = home_screen2[pixel + 1]*shade;
+                }else{
+                    g = home_screen[pixel + 1];
+                }
+                if(home_screen[pixel + 2] == 0){ 
+                    b = home_screen2[pixel + 2]*shade;
+                }else{
+                    b = home_screen[pixel + 2];
+                }   
+                
+
+                SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
+                SDL_RenderDrawPoint((*game)->renderer, x, y);
+
+                
+
+                pixel += 3;
+            }
+        }
+    }
+    
+
+}
+
 void render_frame(SDL_Renderer *renderer){
     SDL_RenderPresent(renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -540,6 +595,9 @@ void render_loop(Raycaster *rc, Game *game){
 
     //Timer
     int timer = 0;
+
+    //Shade
+    double shade = 0;
     
     while (!(*game)->quit){
 
@@ -563,14 +621,26 @@ void render_loop(Raycaster *rc, Game *game){
                 timer = 0;
             }
         }else {
-            printf(" TELA HOME\n");
-            if(timer >= 120){
+
+            if(shade > 1){ shade = 1;}
+
+            if(timer < 120){
+                draw_home(game, 1, shade);
+                shade += 0.01;
+            }else{
+                if(timer == 120){ shade = 0;}
+                draw_home(game, 2, shade);
+                shade += 0.01;
+            }
+           
+            //read_keys(&(*game)->keys);
+            if(timer >= 240/* && get_w((*game)->keys) == 1 */){
                 change_state(game);
                 timer = 0;
             }
         }
 
-        
+        render_frame((*game)->renderer);
 
         if (read_keys(&(*game)->keys) != 0)
             (*game)->quit = true;
@@ -578,8 +648,7 @@ void render_loop(Raycaster *rc, Game *game){
         frameTime = SDL_GetTicks() - frameStart;
         if (FRAME_DELAY > frameTime)
             SDL_Delay(FRAME_DELAY - frameTime);
-
-        render_frame((*game)->renderer);
+        
     }
 }
 
