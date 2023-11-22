@@ -32,7 +32,9 @@ void init_game(Game *game);
 
 void game_running(Game game);
 
-/* void change_state(); */
+void change_state(Game *game);
+
+bool get_state(Game *game);
 
 void quit_aplication(Game *game);
 

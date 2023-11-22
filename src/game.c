@@ -93,6 +93,20 @@ void game_running(Game game){
     render_loop(&game->raycaster, &game);
 }
 
+void change_state(Game *game){
+    if((*game)->playing){
+        (*game)->playing = false;
+        (*game)->menu = true;
+    }else{
+        (*game)->menu = false;
+        (*game)->playing = true;
+    }
+}
+
+bool get_state(Game *game){
+    return (*game)->playing;
+}
+
 void quit_aplication(Game *game){
     //Rendering
     SDL_DestroyWindow((*game)->window);
@@ -532,21 +546,31 @@ void render_loop(Raycaster *rc, Game *game){
         frameStart = SDL_GetTicks();
         timer += 1;
 
-        for (int x = 0; x < BUFFER_WIDTH; x++){
+        if(!get_state(game)){
+            for (int x = 0; x < BUFFER_WIDTH; x++){
             calculating(rc, x);
             dda(rc, &(*game)->map);
             draw_texture(rc, x, (*game)->renderer, (*game)->map);
+            }
+
+            show_keys((*game)->font, (*game)->renderer, (*game)->player);
+            
+            handle_event(rc, game);
+
+            //Monster events
+            if(timer >= 60){
+                m_chasing((*game)->queue, (*game)->monster, (*game)->player, (*game)->monster_walking);
+                timer = 0;
+            }
+        }else {
+            printf(" TELA HOME\n");
+            if(timer >= 120){
+                change_state(game);
+                timer = 0;
+            }
         }
 
-        show_keys((*game)->font, (*game)->renderer, (*game)->player);
         
-        handle_event(rc, game);
-
-        //Monster events
-        if(timer >= 60){
-            m_chasing((*game)->queue, (*game)->monster, (*game)->player, (*game)->monster_walking);
-            timer = 0;
-        }
 
         if (read_keys(&(*game)->keys) != 0)
             (*game)->quit = true;
