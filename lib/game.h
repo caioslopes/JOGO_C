@@ -47,6 +47,7 @@ void quit_aplication(Game *game);
 extern int textures[];
 extern int home_screen[];
 extern int home_screen2[];
+extern int game_over[];
 
 // Inicial values
 #define INIT_P_POS_X 22
