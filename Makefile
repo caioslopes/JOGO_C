@@ -11,7 +11,8 @@ SOURCE = 	./src/buttons.c      \
 			./src/sounds.c       \
 			./src/textures.c     \
 			./src/home_screen.c  \
-			./src/home_screen2.c
+			./src/home_screen2.c \
+			./src/game_over.c
 			
 
 SRC = ./src/*.c
