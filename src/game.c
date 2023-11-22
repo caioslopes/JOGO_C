@@ -273,7 +273,7 @@ int choosing_texture(Raycaster *rc, Map map){
     return texNum;
 }
 
-void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
+void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red){
 
     int line_height = calc_wall_height(rc);
 
@@ -330,6 +330,13 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map){
         r -= (int)((*rc)->perp_wall_dist * 6);
         g -= (int)((*rc)->perp_wall_dist * 6);
         b -= (int)((*rc)->perp_wall_dist * 6);
+
+        
+        r += red;
+        g -= red;
+        b -= red;
+
+        if(r > 255){r = 255;}
 
         if (r < 0){ r = 0; }
         if (g < 0){ g = 0; }
@@ -619,6 +626,9 @@ void render_loop(Raycaster *rc, Game *game){
 
     //Shade
     double shade = 0;
+
+    //Dead
+    int red = 0;
     
     while (!(*game)->quit){
 
@@ -629,7 +639,7 @@ void render_loop(Raycaster *rc, Game *game){
             for (int x = 0; x < BUFFER_WIDTH; x++){
                 calculating(rc, x);
                 dda(rc, &(*game)->map);
-                draw_texture(rc, x, (*game)->renderer, (*game)->map);
+                draw_texture(rc, x, (*game)->renderer, (*game)->map, red);
             }
 
             show_keys((*game)->font, (*game)->renderer, (*game)->player);
@@ -646,6 +656,8 @@ void render_loop(Raycaster *rc, Game *game){
                 if(shade > 1){ shade = 1;}
                 draw_home(game, 4, shade);
                 shade += 0.01;
+                red += 2;
+                if(red > 40){red = 40;}
             }
             
         }else {
