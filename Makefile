@@ -17,7 +17,7 @@ SOURCE = 	./src/buttons.c      \
 			./assets/textures/floor_ceiling.c
 			
 
-SRC = ./src/*.c
+SRC = ./src/*.c ./assets/textures/*c
 
 NAME = NaoOlhe
 
@@ -52,9 +52,9 @@ macos	: 	$(SRC)
 linux	: 	$(OBJ)
 			$(CC) -o $(NAME) $(OBJ) $(LDLIBS)
 			
-#copy this code in terminal (for windows)
-windows :   
-			gcc -std=c99 -o NaoOlhe.exe ./src/*c ./assets/textures/*c -I ./SDL2/include -L ./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -mwindows
+# Put "mingw32-make windows" in terminal
+windows :   	
+			gcc -std=c99 -o NaoOlhe.exe ./src/*c ./assets/textures/*c -I ./SDL2/include -L ./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -mwindows
 
 clean	:
 			$(RM) $(OBJ)
