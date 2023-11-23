@@ -384,8 +384,8 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red
         double currentFloorY = weight * floorYWall + (1.0 - weight) * (*rc)->player_pos_y;
 
         int floorTexX, floorTexY;
-        floorTexX = (int)(currentFloorX * TILE) % TILE;
-        floorTexY = (int)(currentFloorY * TILE) % TILE;
+        floorTexX = (int)(currentFloorX * TILE) % 32;
+        floorTexY = (int)(currentFloorY * TILE) % 32;
 
         int pixel = ((int)(floorTexY)*32+floorTexX) * 3;
         int r, g, b;
