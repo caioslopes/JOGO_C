@@ -331,7 +331,6 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red
         r -= (int)((*rc)->perp_wall_dist * 6);
         g -= (int)((*rc)->perp_wall_dist * 6);
         b -= (int)((*rc)->perp_wall_dist * 6);
-
         
         r += red;
         g -= red;
@@ -387,12 +386,15 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red
         floorTexX = (int)(currentFloorX * TILE) % 32;
         floorTexY = (int)(currentFloorY * TILE) % 32;
 
-        int pixel = ((int)(floorTexY)*32+floorTexX) * 3;
+        int pixel = ((int)(floorTexY)*32+floorTexX) * 3 /* + (32*32*3) */;
+        int pixel2 = ((int)(floorTexY)*32+floorTexX) * 3 + (32*32*3);
         int r, g, b;
+        int r2, g2, b2;
 
-        r = textures[pixel+0];
-        g = textures[pixel+1];
-        b = textures[pixel+2];
+        //Floor
+        r = floor_ceiling[pixel+0];
+        g = floor_ceiling[pixel+1];
+        b = floor_ceiling[pixel+2];
 
         r -= (int)(currentDist * 6);
         g -= (int)(currentDist * 6);
@@ -406,18 +408,41 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red
         g -= red;
         b -= red;
 
-        if(r > 255){r = 255;}
+        //Ceiling
+        r2 = floor_ceiling[pixel2+0];
+        g2 = floor_ceiling[pixel2+1];
+        b2 = floor_ceiling[pixel2+2];
+
+        r2 -= (int)(currentDist * 6);
+        g2 -= (int)(currentDist * 6);
+        b2 -= (int)(currentDist * 6);
+
+        r2 -= 30;
+        g2 -= 30;
+        b2 -= 30;
+        
+        r2 += red;
+        g2 -= red;
+        b2 -= red;
+
+        //Converting colors
+        if(r > 255){r = 255;} 
+        if(r2 > 255){r2 = 255;}
 
         if (r < 0){ r = 0; }
         if (g < 0){ g = 0; }
         if (b < 0){ b = 0; }
+
+        if(r2 < 0){ r2 = 0; }
+        if(g2 < 0){ g2 = 0; }
+        if(b2 < 0){ b2 = 0; }
         
         //Floor
         SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawPoint(renderer, x, y);
 
         //Ceil
-        SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(renderer, r2, g2, b2, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawPoint(renderer, x, BUFFER_HEIGHT - y);
     }
 
