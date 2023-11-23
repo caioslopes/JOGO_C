@@ -32,9 +32,9 @@ void init_game(Game *game);
 
 void game_running(Game game);
 
-void change_state(Game *game);
+void change_state(Game *game, int screen);
 
-bool get_state(Game *game);
+int get_state(Game *game);
 
 void quit_aplication(Game *game);
 
@@ -48,6 +48,7 @@ extern int textures[];
 extern int home_screen[];
 extern int home_screen2[];
 extern int game_over[];
+extern int escaped[];
 
 // Inicial values
 #define INIT_P_POS_X 22
@@ -70,7 +71,7 @@ void dda(Raycaster *rc, Map *map);
 int calc_wall_height(Raycaster *rc);
 int choosing_texture(Raycaster *rc, Map map);
 void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red);
-void draw_home(Game *game, int screen_number, double shade);
+void draw_screens(Game *game, int screen_number, double shade, double red_shade);
 void render_frame(SDL_Renderer  *renderer);
 int handle_event(Raycaster *rc, Game *game);
 void change_map_event(Game *game, int door);

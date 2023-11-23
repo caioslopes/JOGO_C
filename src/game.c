@@ -17,6 +17,9 @@ struct game{
     bool menu;
     bool quit;
 
+    //Game screens
+    int screen;
+
     //Sounds
     Mix_Music *sound_track;
     Mix_Chunk *monster_walking;
@@ -59,6 +62,10 @@ void init_game(Game *game){
     g->playing = true;
     g->menu = false;
 
+    // Screens options - 1 = home screen, 2 = playing screen,
+    // 3 = won screen, 4 = loss screen.
+    g->screen = 1;
+
     //Sounds
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     g->sound_track = Mix_LoadMUS("assets/sounds/sound_track.mp3");
@@ -93,18 +100,12 @@ void game_running(Game game){
     render_loop(&game->raycaster, &game);
 }
 
-void change_state(Game *game){
-    if((*game)->playing){
-        (*game)->playing = false;
-        (*game)->menu = true;
-    }else{
-        (*game)->menu = false;
-        (*game)->playing = true;
-    }
+void change_state(Game *game, int screen){
+    (*game)->screen = screen;
 }
 
-bool get_state(Game *game){
-    return (*game)->playing;
+int get_state(Game *game){
+    return (*game)->screen;
 }
 
 void quit_aplication(Game *game){
@@ -350,19 +351,38 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red
 
 }
 
-void draw_home(Game *game, int screen_number, double shade){
+void draw_screens(Game *game, int screen_number, double shade, double red_shade){
 
     int pixel = 0;
     int r, g, b;
     printf("entrou\n");
-    //double temp_shade = shade;
-
+    
     if(screen_number == 1){
         for(int y = 0; y < BUFFER_HEIGHT; y++){
             for(int x = 0; x < BUFFER_WIDTH; x++){
-                r = home_screen[pixel + 0]*shade;
-                g = home_screen[pixel + 1]*shade;
-                b = home_screen[pixel + 2]*shade;
+
+                //Verifications to apply shading transition just in the background image
+                if(home_screen[pixel + 0] == 0){ 
+                    r = home_screen2[pixel + 0]*shade;
+                }else{
+                    r = home_screen[pixel + 0];
+                }
+                if(home_screen[pixel + 1] == 0){ 
+                    g = home_screen2[pixel + 1]*shade;
+                }else{
+                    g = home_screen[pixel + 1];
+                }
+                if(home_screen[pixel + 2] == 0){ 
+                    b = home_screen2[pixel + 2]*shade;
+                }else{
+                    b = home_screen[pixel + 2];
+                }   
+
+                if(red_shade > 1){ red_shade = 1;}
+
+                r *= red_shade;
+                g *= red_shade;
+                b *= red_shade;                    
 
                 SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
                 SDL_RenderDrawPoint((*game)->renderer, x, y);
@@ -371,58 +391,41 @@ void draw_home(Game *game, int screen_number, double shade){
             }
         }
     }else{
-        if(screen_number == 2){
+        if(screen_number == 3){
             for(int y = 0; y < BUFFER_HEIGHT; y++){
                 for(int x = 0; x < BUFFER_WIDTH; x++){
-
-                    //Verifications to apply shading transition just in the background image
-                    if(home_screen[pixel + 0] == 0){ 
-                        r = home_screen2[pixel + 0]*shade;
-                    }else{
-                        r = home_screen[pixel + 0];
-                    }
-                    if(home_screen[pixel + 1] == 0){ 
-                        g = home_screen2[pixel + 1]*shade;
-                    }else{
-                        g = home_screen[pixel + 1];
-                    }
-                    if(home_screen[pixel + 2] == 0){ 
-                        b = home_screen2[pixel + 2]*shade;
-                    }else{
-                        b = home_screen[pixel + 2];
-                    }   
-                    
+                    r = escaped[pixel + 0]*shade;
+                    g = escaped[pixel + 1]*shade;
+                    b = escaped[pixel + 2]*shade;
 
                     SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
                     SDL_RenderDrawPoint((*game)->renderer, x, y);
-
-                    
 
                     pixel += 3;
                 }
             }
         }else{
-            for(int y = 0; y < 120; y++){
-                for(int x = 0; x < 213; x++){
-                    r = game_over[pixel + 0];
-                    g = game_over[pixel + 1];
-                    b = game_over[pixel + 2];
+            if(screen_number == 4){
+                for(int y = 0; y < 120; y++){
+                    for(int x = 0; x < 213; x++){
+                        r = game_over[pixel + 0];
+                        g = game_over[pixel + 1];
+                        b = game_over[pixel + 2];
 
-                    if(r != 255 || g != 0 || b != 255){
-                        r *= shade;
-                        g *= shade;
-                        b *= shade;
-                        SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
-                        SDL_RenderDrawPoint((*game)->renderer, x+(BUFFER_WIDTH/4), y+(BUFFER_HEIGHT/4));
+                        if(r != 255 || g != 0 || b != 255){
+                            r *= shade;
+                            g *= shade;
+                            b *= shade;
+                            SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
+                            SDL_RenderDrawPoint((*game)->renderer, x+(BUFFER_WIDTH/4), y+(BUFFER_HEIGHT/4));
+                        }
+                    
+                        pixel += 3;
                     }
-                
-                    pixel += 3;
                 }
             }  
-        }
-        
+        }   
     }
-    
 
 }
 
@@ -598,6 +601,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 5){
             play_chunk((*game)->openning_door);
             printf("Você escapou!\n");
+            change_state(game, 3);
         }
         else{
             printf("Porta trancada!\n");
@@ -607,6 +611,7 @@ void change_map_event(Game *game, int door){
         if(get_qtd_keys((*game)->player) >= 5){
             play_chunk((*game)->openning_door);
             printf("Você escapou!\n");
+            change_state(game, 3);
         }
         else{
             printf("Porta trancada!\n");
@@ -626,6 +631,7 @@ void render_loop(Raycaster *rc, Game *game){
 
     //Shade
     double shade = 0;
+    double red_shade = 0;
 
     //Dead
     int red = 0;
@@ -635,7 +641,7 @@ void render_loop(Raycaster *rc, Game *game){
         frameStart = SDL_GetTicks();
         timer += 1;
 
-        if(!get_state(game)){
+        if(get_state(game) == 2){
             for (int x = 0; x < BUFFER_WIDTH; x++){
                 calculating(rc, x);
                 dda(rc, &(*game)->map);
@@ -654,31 +660,39 @@ void render_loop(Raycaster *rc, Game *game){
 
             if(!is_alive((*game)->player)){
                 if(shade > 1){ shade = 1;}
-                draw_home(game, 4, shade);
+                draw_screens(game, 4, shade, red_shade);
                 shade += 0.01;
                 red += 2;
                 if(red > 40){red = 40;}
             }
             
         }else {
+            if(get_state(game) == 1){
 
-            if(shade > 1){ shade = 1;}
+                if(timer < 120){ shade = 0;}
 
-            if(timer < 120){
-                draw_home(game, 1, shade);
+                if(shade > 1){ shade = 1;}
+                if(red_shade > 1){ red_shade = 1;}
+                draw_screens(game, 1, shade, red_shade);
                 shade += 0.01;
+                red_shade += 0.01;
+
+                printf("%d\n", timer);
+
+                if(timer >= 240 || get_w((*game)->keys) == 1 ){
+                    change_state(game, 2);
+                    timer = 0;
+                    shade = 0;
+                }
+                
             }else{
-                if(timer == 120){ shade = 0;}
-                draw_home(game, 2, shade);
-                shade += 0.01;
+                if(get_state(game) == 3){
+                    if(shade > 1){ shade = 1;}
+                    draw_screens(game, 3, shade, red_shade);
+                    shade += 0.01;
+                }
             }
-           
-            //read_keys(&(*game)->keys);
-            if(timer >= 240/* && get_w((*game)->keys) == 1 */){
-                change_state(game);
-                timer = 0;
-                shade = 0;
-            }
+            
         }
 
         render_frame((*game)->renderer);
