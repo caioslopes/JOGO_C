@@ -17,7 +17,7 @@ SOURCE = 	./src/buttons.c      \
 			./assets/textures/floor_ceiling.c
 			
 
-SRC = ./src/*.c ./assets/textures/*c
+SRC = ./src/*.c ./assets/textures/*.c
 
 NAME = NaoOlhe
 
