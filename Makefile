@@ -9,10 +9,12 @@ SOURCE = 	./src/buttons.c      \
 			./src/player.c       \
 			./src/queue.c        \
 			./src/sounds.c       \
-			./src/textures.c     \
-			./src/home_screen.c  \
-			./src/home_screen2.c \
-			./src/game_over.c
+			./assets/textures/textures.c     \
+			./assets/textures/home_screen.c  \
+			./assets/textures/home_screen2.c \
+			./assets/textures/game_over.c    \
+			./assets/textures/you_escaped.c  \
+			./assets/textures/floor_ceiling.c
 			
 
 SRC = ./src/*.c
@@ -52,7 +54,7 @@ linux	: 	$(OBJ)
 			
 #copy this code in terminal (for windows)
 windows :   
-			gcc -std=c99 -o NaoOlhe.exe ./src/*c -I ./SDL2/include -L ./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -mwindows
+			gcc -std=c99 -o NaoOlhe.exe ./src/*c ./assets/textures/*c -I ./SDL2/include -L ./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -mwindows
 
 clean	:
 			$(RM) $(OBJ)
