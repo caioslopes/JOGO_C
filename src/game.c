@@ -349,6 +349,78 @@ void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red
         SDL_RenderDrawPoint(renderer, x, y);
     }
 
+    //FLOOR CASTING (vertical version, directly after drawing the vertical wall stripe for the current x)
+    double floorXWall, floorYWall; //x, y position of the floor texel at the bottom of the wall
+
+    //4 different wall directions possible
+    if((*rc)->side == 0 && (*rc)->ray_dir_x > 0){
+        floorXWall = (*rc)->map_x;
+        floorYWall = (*rc)->map_y + wallX;
+    }else if((*rc)->side == 0 && (*rc)->ray_dir_x < 0){
+        floorXWall = (*rc)->map_x + 1.0;
+        floorYWall = (*rc)->map_y + wallX;
+    }else if((*rc)->side == 1 && (*rc)->ray_dir_y > 0){
+        floorXWall = (*rc)->map_x + wallX;
+        floorYWall = (*rc)->map_y;
+    }else{
+        floorXWall = (*rc)->map_x + wallX;
+        floorYWall = (*rc)->map_y + 1.0;
+    }
+
+    double distWall, distPlayer, currentDist;
+
+    distWall = (*rc)->perp_wall_dist;
+    distPlayer = 0.0;
+
+    if ((*rc)->draw_start < 0) (*rc)->draw_end = BUFFER_HEIGHT; //becomes < 0 when the integer overflows
+
+    //draw the floor from drawEnd to the bottom of the screen
+    for(int y = (*rc)->draw_end + 1; y < BUFFER_HEIGHT; y++){
+        currentDist = BUFFER_HEIGHT / (2.0 * y - BUFFER_HEIGHT); //you could make a small lookup table for this instead
+
+        double weight = (currentDist - distPlayer) / (distWall - distPlayer);
+
+        double currentFloorX = weight * floorXWall + (1.0 - weight) * (*rc)->player_pos_x;
+        double currentFloorY = weight * floorYWall + (1.0 - weight) * (*rc)->player_pos_y;
+
+        int floorTexX, floorTexY;
+        floorTexX = (int)(currentFloorX * TILE) % TILE;
+        floorTexY = (int)(currentFloorY * TILE) % TILE;
+
+        int pixel = ((int)(floorTexY)*32+floorTexX) * 3;
+        int r, g, b;
+
+        r = textures[pixel+0];
+        g = textures[pixel+1];
+        b = textures[pixel+2];
+
+        r -= (int)(currentDist * 6);
+        g -= (int)(currentDist * 6);
+        b -= (int)(currentDist * 6);
+
+        r -= 30;
+        g -= 30;
+        b -= 30;
+        
+        r += red;
+        g -= red;
+        b -= red;
+
+        if(r > 255){r = 255;}
+
+        if (r < 0){ r = 0; }
+        if (g < 0){ g = 0; }
+        if (b < 0){ b = 0; }
+        
+        //Floor
+        SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawPoint(renderer, x, y);
+
+        //Ceil
+        SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawPoint(renderer, x, BUFFER_HEIGHT - y);
+    }
+
 }
 
 void draw_screens(Game *game, int screen_number, double shade, double red_shade){
