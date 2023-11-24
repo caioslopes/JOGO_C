@@ -919,6 +919,9 @@ void render_loop(Raycaster *rc, Game *game){
                         shade = 0;
                     }
                 }
+                if(get_esc((*game)->keys)){
+                    (*game)->quit = true;
+                }
                 
             }else{
                 //Escape screen
