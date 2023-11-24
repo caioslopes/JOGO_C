@@ -529,8 +529,8 @@ void draw_screens(Game *game, int screen_number, double shade, double red_shade)
             }
         }else{
             if(screen_number == 4){
-                for(int y = 0; y < 120; y++){
-                    for(int x = 0; x < 213; x++){
+                for(int y = 0; y < BUFFER_HEIGHT; y++){
+                    for(int x = 0; x < BUFFER_WIDTH; x++){
                         r = game_over[pixel + 0];
                         g = game_over[pixel + 1];
                         b = game_over[pixel + 2];
@@ -540,7 +540,7 @@ void draw_screens(Game *game, int screen_number, double shade, double red_shade)
                             g *= shade;
                             b *= shade;
                             SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
-                            SDL_RenderDrawPoint((*game)->renderer, x+(BUFFER_WIDTH/4), y+(BUFFER_HEIGHT/4));
+                            SDL_RenderDrawPoint((*game)->renderer, x, y);
                         }
                     
                         pixel += 3;
