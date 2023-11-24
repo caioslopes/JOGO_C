@@ -55,8 +55,9 @@ linux	: 	$(OBJ)
 			$(CC) -o $(NAME) $(OBJ) $(LDLIBS)
 			
 # Put "mingw32-make windows" in terminal
+#./lib/icon.o
 windows :   	
-			gcc -std=c99 ./lib/icon.o -o NaoOlhe.exe ./src/*c ./assets/textures/*c -I ./SDL2/include -L ./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -mwindows
+			gcc -std=c99 -o NaoOlhe.exe ./src/*c ./assets/textures/*c -I ./SDL2/include -L ./SDL2/lib/ -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_ttf -mwindows
 
 clean	:
 			$(RM) $(OBJ)
