@@ -108,6 +108,26 @@ int get_state(Game *game){
     return (*game)->screen;
 }
 
+void restart_game(Game *game){
+
+    close_map(&(*game)->map);
+    close_buttons(&(*game)->keys);
+    close_player(&(*game)->player);
+    close_queue(&(*game)->queue);
+    close_element(&(*game)->element);
+    close_monster(&(*game)->monster);
+
+    init_raycaster(&(*game)->raycaster);
+    init_buttons(&(*game)->keys);
+    restart_itens();
+    init_map(&(*game)->map);
+    init_player(&(*game)->player);
+    init_queue(&(*game)->queue);
+    init_element(&(*game)->element);
+    init_monster(&(*game)->monster);
+    change_state(game, 1);
+}
+
 void quit_aplication(Game *game){
     //Rendering
     SDL_DestroyWindow((*game)->window);
@@ -796,6 +816,10 @@ void render_loop(Raycaster *rc, Game *game){
 
         if (read_keys(&(*game)->keys) != 0)
             (*game)->quit = true;
+
+        
+        if(get_esc((*game)->keys))
+            restart_game(game);
 
         frameTime = SDL_GetTicks() - frameStart;
         if (FRAME_DELAY > frameTime)

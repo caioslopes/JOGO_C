@@ -66,6 +66,28 @@ void clear_item(Map map){
     }
 }
 
+void restart_itens(){
+    for (int row = 0; row < MAPHEIGHT; row++){
+        for (int column = 0; column < MAPHEIGHT; column++){
+            if (main_room[row][column] == 10){
+                main_room[row][column] = 9;
+            }
+            if (second_room[row][column] == 10){
+                second_room[row][column] = 9;
+            }
+            if (third_room[row][column] == 10){
+                third_room[row][column] = 9;
+            }
+            if (fourth_room[row][column] == 10){
+                fourth_room[row][column] = 9;
+            }
+            if (fifth_room[row][column] == 10){
+                fifth_room[row][column] = 9;
+            }
+        }
+    }
+}
+
 int on_map(Map map, int x, int y){
     return map->matriz[x][y];
 }

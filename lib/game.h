@@ -36,6 +36,8 @@ void change_state(Game *game, int screen);
 
 int get_state(Game *game);
 
+void restart_game(Game *game);
+
 void quit_aplication(Game *game);
 
 /******************

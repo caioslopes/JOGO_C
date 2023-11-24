@@ -51,6 +51,9 @@ int read_keys(ButtonKeys *key){
             if (event.key.keysym.sym == SDLK_e){
                 (*key)->e = 1;
             }
+            if (event.key.keysym.sym == SDLK_ESCAPE){
+                (*key)->esc = 1;
+            }
         }
 
         if (event.type == SDL_KEYUP){
@@ -68,6 +71,9 @@ int read_keys(ButtonKeys *key){
             }
             if (event.key.keysym.sym == SDLK_e){
                 (*key)->e = 0;
+            }
+            if (event.key.keysym.sym == SDLK_ESCAPE){
+                (*key)->esc = 0;
             }
         }
     }

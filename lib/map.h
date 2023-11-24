@@ -25,6 +25,8 @@ void generate_map(Map *map, int room[][MAPHEIGHT]);
 
 void clear_item(Map map);
 
+void restart_itens();
+
 int on_map(Map map, int x, int y);
 
 double on_map_double(Map map, int x, int y);
