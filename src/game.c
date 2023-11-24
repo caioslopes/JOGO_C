@@ -674,7 +674,9 @@ int handle_event(Raycaster *rc, Game *game, bool *playing, int *channel){
                 if(get_k((*game)->keys)){
                     restart_game(game);
                     change_state(game, 1);
-                } 
+                }
+                if (read_keys(&(*game)->keys) != 0)
+                    (*game)->quit = true; 
             }
         }
     }
@@ -911,7 +913,7 @@ void render_loop(Raycaster *rc, Game *game){
                 if(start){
                     shade += 0.01;
                     printf("%d\n", timer);
-                    if(shade >=1 || get_w((*game)->keys) == 1 ){
+                    if(shade >=1 || get_movement_buttons((*game)->keys) == 1 ){
                         change_state(game, 2);
                         timer = 0;
                         shade = 0;
