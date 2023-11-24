@@ -52,6 +52,8 @@ extern int home_screen2[];
 extern int game_over[];
 extern int escaped[];
 extern int floor_ceiling[];
+extern int pause_screen[];
+extern int press[];
 
 // Inicial values
 #define INIT_P_POS_X 22
