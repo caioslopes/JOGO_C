@@ -113,6 +113,14 @@ int get_esc(ButtonKeys key){ return key->esc; }
 
 int get_enter(ButtonKeys key){ return key->enter; }
 
+int get_movement_buttons(ButtonKeys key){
+    if(get_w(key) || get_a(key) || get_s(key) || get_d(key)){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
 void close_buttons(ButtonKeys *keys){
     if(keys != NULL){
         free(*keys);

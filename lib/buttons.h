@@ -25,6 +25,8 @@ int get_esc(ButtonKeys key);
 
 int get_enter(ButtonKeys key);
 
+int get_movement_buttons(ButtonKeys key);
+
 void close_buttons(ButtonKeys *keys);
 
 #endif
