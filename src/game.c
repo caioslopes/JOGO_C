@@ -842,6 +842,9 @@ void render_loop(Raycaster *rc, Game *game){
 
     bool playing_closed_door = false;
     int channel_closed_door = 0;
+
+    //Control steps
+    int move_time = 60;
     
     while (!(*game)->quit){
 
@@ -861,11 +864,24 @@ void render_loop(Raycaster *rc, Game *game){
             show_keys((*game)->font, (*game)->renderer, (*game)->player);
             handle_event(rc, game, &playing_closed_door, &channel_closed_door);
 
+            if(get_size((*game)->queue) < 5){
+                move_time = 30;
+            }
+
+            if(get_size((*game)->queue) >= 5 && get_size((*game)->queue) < 8 ){
+                move_time = 45;
+            }
+
+            if(get_size((*game)->queue) >= 8){
+                move_time = 60;
+            }
+
             //Monster events
-            if(timer >= 30){
+            if(timer >= move_time){
                 m_chasing((*game)->queue, (*game)->monster, (*game)->player, (*game)->monster_walking);
                 timer = 0;
             }
+
 
             //Control Audio flag
             if(Mix_Playing(channel_heavy_breathing) == 0){
