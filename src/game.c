@@ -63,7 +63,7 @@ void init_game(Game *game){
     g->menu = false;
 
     // Screens options - 1 = home screen, 2 = playing screen,
-    // 3 = won screen, 4 = loss screen.
+    // 3 = won screen, 4 = loss screen, 5 = paused screen, 6 = press enter;
     g->screen = 1;
 
     //Sounds
@@ -126,6 +126,7 @@ void restart_game(Game *game){
     init_element(&(*game)->element);
     init_monster(&(*game)->monster);
     change_state(game, 1);
+    render_loop(&(*game)->raycaster, game);
 }
 
 void quit_aplication(Game *game){
@@ -540,6 +541,41 @@ void draw_screens(Game *game, int screen_number, double shade, double red_shade)
                         pixel += 3;
                     }
                 }
+            }else{
+                if(screen_number == 5){
+                    for(int y = 0; y < BUFFER_HEIGHT; y++){
+                        for(int x = 0; x < BUFFER_WIDTH; x++){
+                            r = pause_screen[pixel + 0]*shade;
+                            g = pause_screen[pixel + 1]*shade;
+                            b = pause_screen[pixel + 2]*shade;
+
+                            SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
+                            SDL_RenderDrawPoint((*game)->renderer, x, y);
+
+                            pixel += 3;
+                        }
+                    }
+                }else{
+                    if(screen_number == 6){
+                        for(int y = 0; y < BUFFER_HEIGHT; y++){
+                            for(int x = 0; x < BUFFER_WIDTH; x++){
+                                r = press[pixel + 0];
+                                g = press[pixel + 1];
+                                b = press[pixel + 2];
+
+                                if(r != 255 || g != 0 || b != 255){
+                                    r *= shade;
+                                    g *= shade;
+                                    b *= shade;
+                                    SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
+                                    SDL_RenderDrawPoint((*game)->renderer, x, y);
+                                }
+                            
+                                pixel += 3;
+                            }
+                        }
+                    }
+                }
             }  
         }   
     }
@@ -618,6 +654,27 @@ int handle_event(Raycaster *rc, Game *game){
                 change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)));
             if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) != 0)
                 change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)));
+        }
+
+        //Pause game
+
+        if(((get_esc((*game)->keys) && get_state(game) != 3) || get_state(game) == 5)){
+            
+            change_state(game, 5);
+            draw_screens(game, 5, 1, 0);
+            SDL_RenderPresent((*game)->renderer);
+            while(get_state(game) == 5){
+                read_keys(&(*game)->keys);
+                if(get_enter((*game)->keys)){
+                    change_state(game, 2);
+                }
+
+                if(get_k((*game)->keys)){
+                    restart_game(game);
+                    change_state(game, 1);
+
+                } 
+            }
         }
     }
         
@@ -752,13 +809,18 @@ void render_loop(Raycaster *rc, Game *game){
 
     //Dead
     int red = 0;
+
+    //Start
+    int start = 0;
     
     while (!(*game)->quit){
 
         frameStart = SDL_GetTicks();
         timer += 1;
 
+        //Game running
         if(get_state(game) == 2){
+            start = 0;
             for (int x = 0; x < BUFFER_WIDTH; x++){
                 calculating(rc, x);
                 dda(rc, &(*game)->map);
@@ -775,38 +837,61 @@ void render_loop(Raycaster *rc, Game *game){
                 timer = 0;
             }
 
+            //Dead
             if(!is_alive((*game)->player)){
                 if(shade > 1){ shade = 1;}
                 draw_screens(game, 4, shade, red_shade);
                 shade += 0.01;
                 red += 2;
                 if(red > 40){red = 40;}
+                if(get_enter((*game)->keys)){
+                    restart_game(game);
+                }
+                if(get_esc((*game)->keys)){
+                    quit_aplication(game);
+                }
             }
             
         }else {
+            //Home screen
             if(get_state(game) == 1){
 
-                if(timer < 120){ shade = 0;}
-
+                if(!start)
+                    if(get_enter((*game)->keys) && start == 0){ shade = 0; start = 1;}
+ 
                 if(shade > 1){ shade = 1;}
                 if(red_shade > 1){ red_shade = 1;}
                 draw_screens(game, 1, shade, red_shade);
-                shade += 0.01;
+                if(timer > 120 && !start){draw_screens(game, 6, 1, 0);}
+                
                 red_shade += 0.01;
 
-                printf("%d\n", timer);
+                if(start){
+                    shade += 0.01;
 
-                if(timer >= 240 || get_w((*game)->keys) == 1 ){
-                    change_state(game, 2);
-                    timer = 0;
-                    shade = 0;
+                    printf("%d\n", timer);
+
+                    if(shade >=1 || get_w((*game)->keys) == 1 ){
+                        change_state(game, 2);
+                        timer = 0;
+                        shade = 0;
+                    }
                 }
                 
             }else{
+                //Escape screen
                 if(get_state(game) == 3){
                     if(shade > 1){ shade = 1;}
                     draw_screens(game, 3, shade, red_shade);
                     shade += 0.01;
+
+                    if(get_enter((*game)->keys)){
+                        restart_game(game);
+                    }
+                    
+                    if(get_esc((*game)->keys)){
+                        (*game)->quit = true;
+                    }
                 }
             }
             
@@ -815,11 +900,7 @@ void render_loop(Raycaster *rc, Game *game){
         render_frame((*game)->renderer);
 
         if (read_keys(&(*game)->keys) != 0)
-            (*game)->quit = true;
-
-        
-        if(get_esc((*game)->keys))
-            restart_game(game);
+            (*game)->quit = true;     
 
         frameTime = SDL_GetTicks() - frameStart;
         if (FRAME_DELAY > frameTime)

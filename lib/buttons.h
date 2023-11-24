@@ -19,7 +19,11 @@ int get_s(ButtonKeys key);
 
 int get_e(ButtonKeys key);
 
+int get_k(ButtonKeys key);
+
 int get_esc(ButtonKeys key);
+
+int get_enter(ButtonKeys key);
 
 void close_buttons(ButtonKeys *keys);
 
