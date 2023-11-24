@@ -2,9 +2,10 @@
 #define SOUNDS_H_
 
 #include "utils.h"
+#include "queue.h"
 
-void play_music(Mix_Music *sound_track);
+int play_music(Mix_Music *sound_track);
 
-void play_chunk(Mix_Chunk *chunk);
+int play_chunk(Mix_Chunk *chunk);
 
 #endif

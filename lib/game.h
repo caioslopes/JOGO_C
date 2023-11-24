@@ -78,8 +78,14 @@ int choosing_texture(Raycaster *rc, Map map);
 void draw_texture(Raycaster *rc, int x, SDL_Renderer *renderer, Map map, int red);
 void draw_screens(Game *game, int screen_number, double shade, double red_shade);
 void render_frame(SDL_Renderer  *renderer);
-int handle_event(Raycaster *rc, Game *game);
-void change_map_event(Game *game, int door);
+
+/* int handle_event(Raycaster *rc, Game *game); */
+/* void change_map_event(Game *game, int door); */
+
+//testando -> melhorar
+int handle_event(Raycaster *rc, Game *game, bool *playing, int *channel);
+void change_map_event(Game *game, int door, bool *playing, int *channel);
+
 void changing_map(Game *game, int room[][MAPHEIGHT], int x, int y);
 void render_loop(Raycaster *rc, Game *game);
 void close_raycaster(Raycaster *rc);

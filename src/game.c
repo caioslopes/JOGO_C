@@ -25,6 +25,7 @@ struct game{
     Mix_Chunk *monster_walking;
     Mix_Chunk *openning_door;
     Mix_Chunk *closed_door;
+    Mix_Chunk *heavy_breathing;
     Mix_Chunk *pick_up_keys;
 
     //Fonts
@@ -68,10 +69,12 @@ void init_game(Game *game){
 
     //Sounds
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 8);
     g->sound_track = Mix_LoadMUS("assets/sounds/sound_track.mp3");
     g->monster_walking = Mix_LoadWAV("assets/sounds/monster_walking.wav");
-    /* g->closed_door = ; */
+    g->closed_door = Mix_LoadWAV("assets/sounds/closed_door.wav");
     g->openning_door = Mix_LoadWAV("assets/sounds/openning_door.wav");
+    g->heavy_breathing = Mix_LoadWAV("assets/sounds/heavy_breathing.wav");
     g->pick_up_keys = Mix_LoadWAV("assets/sounds/pick_up_keys.wav");
 
     //Fonts
@@ -138,6 +141,8 @@ void quit_aplication(Game *game){
     Mix_FreeMusic((*game)->sound_track);
     Mix_FreeChunk((*game)->monster_walking);
     Mix_FreeChunk((*game)->openning_door);
+    Mix_FreeChunk((*game)->closed_door);
+    Mix_FreeChunk((*game)->heavy_breathing);
     Mix_FreeChunk((*game)->pick_up_keys);
     Mix_CloseAudio();
 
@@ -588,7 +593,7 @@ void render_frame(SDL_Renderer *renderer){
     SDL_RenderClear(renderer);
 }
 
-int handle_event(Raycaster *rc, Game *game){
+int handle_event(Raycaster *rc, Game *game, bool *playing, int *channel){
     double oldDirX;
     double oldPlaneX;
 
@@ -651,15 +656,13 @@ int handle_event(Raycaster *rc, Game *game){
         //Change map event
         if(get_e((*game)->keys)){
             if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) != 0)
-                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)));
+                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)), playing, channel);
             if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) != 0)
-                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)));
+                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)), playing, channel);
         }
 
         //Pause game
-
         if(((get_esc((*game)->keys) && get_state(game) != 3) || get_state(game) == 5)){
-            
             change_state(game, 5);
             draw_screens(game, 5, 1, 0);
             SDL_RenderPresent((*game)->renderer);
@@ -668,11 +671,9 @@ int handle_event(Raycaster *rc, Game *game){
                 if(get_enter((*game)->keys)){
                     change_state(game, 2);
                 }
-
                 if(get_k((*game)->keys)){
                     restart_game(game);
                     change_state(game, 1);
-
                 } 
             }
         }
@@ -687,7 +688,11 @@ void changing_map(Game *game, int room[][MAPHEIGHT], int x, int y){
     (*game)->raycaster->player_pos_y = y;
 }
 
-void change_map_event(Game *game, int door){
+void change_map_event(Game *game, int door, bool *playing, int *channel){
+    if(Mix_Playing(*channel) == 0){
+        *playing = false;
+    }
+
     switch (door){
     case 12:
         if(get_qtd_keys((*game)->player) >= 1){
@@ -697,6 +702,10 @@ void change_map_event(Game *game, int door){
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
+            if(!*playing){
+                *channel = play_chunk((*game)->closed_door);
+                *playing = true;
+            }
         }
         break;
     case 21:
@@ -705,8 +714,6 @@ void change_map_event(Game *game, int door){
             changing_map(game, main_room, 7, 11);
             update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
-        }else{
-            printf("Porta trancada!\n");
         }
         break;
     case 13:
@@ -717,6 +724,10 @@ void change_map_event(Game *game, int door){
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
+            if(!*playing){
+                *channel = play_chunk((*game)->closed_door);
+                *playing = true;
+            }
         }
         break;
     case 31:
@@ -725,8 +736,6 @@ void change_map_event(Game *game, int door){
             changing_map(game, main_room, 7, 12);
             update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
-        }else{
-            printf("Porta trancada!\n");
         }
         break;
     case 14:
@@ -738,6 +747,10 @@ void change_map_event(Game *game, int door){
         }
         else{
             printf("Porta trancada!\n");
+            if(!*playing){
+                *channel = play_chunk((*game)->closed_door);
+                *playing = true;
+            }
         }
         break;
     case 41:
@@ -746,8 +759,6 @@ void change_map_event(Game *game, int door){
             changing_map(game, main_room, 15, 12);
             update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
-        }else{
-            printf("Porta trancada!\n");
         }
         break;
     case 15:
@@ -758,6 +769,10 @@ void change_map_event(Game *game, int door){
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
         }else{
             printf("Porta trancada!\n");
+            if(!*playing){
+                *channel = play_chunk((*game)->closed_door);
+                *playing = true;
+            }
         }
         break;
     case 51:
@@ -766,9 +781,6 @@ void change_map_event(Game *game, int door){
             changing_map(game, main_room, 15, 11);
             update_actual_room((*game)->map, 1);
             m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
-        }
-        else{
-            printf("Porta trancada!\n");
         }
         break;  
     case 16:
@@ -779,6 +791,10 @@ void change_map_event(Game *game, int door){
         }
         else{
             printf("Porta trancada!\n");
+            if(!*playing){
+                *channel = play_chunk((*game)->closed_door);
+                *playing = true;
+            }
         }
         break;
     case 17:
@@ -789,6 +805,10 @@ void change_map_event(Game *game, int door){
         }
         else{
             printf("Porta trancada!\n");
+            if(!*playing){
+                *channel = play_chunk((*game)->closed_door);
+                *playing = true;
+            }
         }
         break;
     }
@@ -802,6 +822,7 @@ void render_loop(Raycaster *rc, Game *game){
 
     //Timer
     int timer = 0;
+    int timer_breathing = 0;
 
     //Shade
     double shade = 0;
@@ -812,11 +833,19 @@ void render_loop(Raycaster *rc, Game *game){
 
     //Start
     int start = 0;
+
+    //Control audio flag
+    bool playing_heavy_breathing = false;
+    int channel_heavy_breathing = 0;
+
+    bool playing_closed_door = false;
+    int channel_closed_door = 0;
     
     while (!(*game)->quit){
 
         frameStart = SDL_GetTicks();
         timer += 1;
+        timer_breathing += 1;
 
         //Game running
         if(get_state(game) == 2){
@@ -828,17 +857,30 @@ void render_loop(Raycaster *rc, Game *game){
             }
 
             show_keys((*game)->font, (*game)->renderer, (*game)->player);
-            
-            handle_event(rc, game);
+            handle_event(rc, game, &playing_closed_door, &channel_closed_door);
 
             //Monster events
-            if(timer >= 60){
+            if(timer >= 30){
                 m_chasing((*game)->queue, (*game)->monster, (*game)->player, (*game)->monster_walking);
                 timer = 0;
             }
 
+            //Control Audio flag
+            if(Mix_Playing(channel_heavy_breathing) == 0){
+                playing_heavy_breathing = false;
+            }
+
+            //Monster is close
+            if(is_walking((*game)->monster)){
+                if(get_size((*game)->queue) == 4 && !playing_heavy_breathing){
+                    channel_heavy_breathing = play_chunk((*game)->heavy_breathing);
+                    playing_heavy_breathing = true;
+                }
+            }
+
             //Dead
             if(!is_alive((*game)->player)){
+                Mix_Pause(channel_heavy_breathing);
                 if(shade > 1){ shade = 1;}
                 draw_screens(game, 4, shade, red_shade);
                 shade += 0.01;
@@ -848,7 +890,7 @@ void render_loop(Raycaster *rc, Game *game){
                     restart_game(game);
                 }
                 if(get_esc((*game)->keys)){
-                    quit_aplication(game);
+                    (*game)->quit = true;
                 }
             }
             
@@ -868,9 +910,7 @@ void render_loop(Raycaster *rc, Game *game){
 
                 if(start){
                     shade += 0.01;
-
                     printf("%d\n", timer);
-
                     if(shade >=1 || get_w((*game)->keys) == 1 ){
                         change_state(game, 2);
                         timer = 0;
@@ -884,11 +924,9 @@ void render_loop(Raycaster *rc, Game *game){
                     if(shade > 1){ shade = 1;}
                     draw_screens(game, 3, shade, red_shade);
                     shade += 0.01;
-
                     if(get_enter((*game)->keys)){
                         restart_game(game);
                     }
-                    
                     if(get_esc((*game)->keys)){
                         (*game)->quit = true;
                     }
