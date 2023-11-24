@@ -14,7 +14,9 @@ SOURCE = 	./src/buttons.c      \
 			./assets/textures/home_screen2.c \
 			./assets/textures/game_over.c    \
 			./assets/textures/you_escaped.c  \
-			./assets/textures/floor_ceiling.c
+			./assets/textures/floor_ceiling.c\
+			./assets/textures/pause_screen.c \
+			./assets/textures/press_enter.c
 			
 
 SRC = ./src/*.c ./assets/textures/*.c
