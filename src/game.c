@@ -294,13 +294,19 @@ int choosing_texture(Raycaster *rc, Map map){
     int texNum = on_map(map, (*rc)->map_x, (*rc)->map_y);
 
     //rendering doors
-    if((texNum > 11 && texNum < 16) || (texNum == 21 || texNum == 31 || texNum == 41 || texNum == 51)){ texNum = 5; }
+    if(texNum == 15){ texNum = 10; }
+    if(texNum == 14){ texNum = 11; }
+    if(texNum == 12){ texNum = 12; }
+    if(texNum == 13){ texNum = 13; }
+
+    if((texNum == 21 || texNum == 31 || texNum == 41 || texNum == 51)){ texNum = 5; }
+
     if(texNum == 16){ texNum = 6; }
     if(texNum == 17){ texNum = 7; }
     
     //rendering keys
     if(texNum == 9){ texNum = 8; }
-    if(texNum == 10){ texNum = 9; }
+    if(texNum == 20){ texNum = 9; }
 
     return texNum;
 }
