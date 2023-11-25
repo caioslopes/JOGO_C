@@ -12,9 +12,7 @@ struct game{
     SDL_Surface *window_surface;
     SDL_Texture *screen_texture;
 
-    // Game information
-    bool playing;
-    bool menu;
+    // Game informations
     bool quit;
 
     //Game screens
@@ -22,6 +20,7 @@ struct game{
 
     //Sounds
     Mix_Music *sound_track;
+    Mix_Music *running_soundtrack;
     Mix_Chunk *monster_walking;
     Mix_Chunk *openning_door;
     Mix_Chunk *closed_door;
@@ -51,7 +50,7 @@ void init_game(Game *game){
     // SDL options
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    g->window = SDL_CreateWindow("Não olhe para trás", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
+    g->window = SDL_CreateWindow("Não olhe para trás", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN);
     g->renderer = SDL_CreateRenderer(g->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     SDL_SetWindowMinimumSize(g->window, BUFFER_WIDTH, BUFFER_HEIGHT);
@@ -60,17 +59,17 @@ void init_game(Game *game){
 
     // Game options
     g->quit = false;
-    g->playing = true;
-    g->menu = false;
 
     // Screens options - 1 = home screen, 2 = playing screen,
     // 3 = won screen, 4 = loss screen, 5 = paused screen, 6 = press enter;
+    // 7 = run screen
     g->screen = 1;
 
     //Sounds
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    Mix_VolumeMusic(MIX_MAX_VOLUME / 8);
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
     g->sound_track = Mix_LoadMUS("assets/sounds/sound_track.mp3");
+    g->running_soundtrack = Mix_LoadMUS("assets/sounds/running_soundtrack.mp3");
     g->monster_walking = Mix_LoadWAV("assets/sounds/monster_walking.wav");
     g->closed_door = Mix_LoadWAV("assets/sounds/closed_door.wav");
     g->openning_door = Mix_LoadWAV("assets/sounds/openning_door.wav");
@@ -98,7 +97,6 @@ void init_game(Game *game){
 }
 
 void game_running(Game game){
-    play_music(game->sound_track);
     init_raycaster(&game->raycaster);
     render_loop(&game->raycaster, &game);
 }
@@ -139,6 +137,7 @@ void quit_aplication(Game *game){
 
     //Sounds
     Mix_FreeMusic((*game)->sound_track);
+    Mix_FreeMusic((*game)->running_soundtrack);
     Mix_FreeChunk((*game)->monster_walking);
     Mix_FreeChunk((*game)->openning_door);
     Mix_FreeChunk((*game)->closed_door);
@@ -166,6 +165,9 @@ void quit_aplication(Game *game){
 *********************/
 
 struct raycaster{
+    double mv_speed;
+    double rot_speed;
+
     double player_pos_x;
     double player_pos_y;
     double player_dir_x;
@@ -193,6 +195,9 @@ void init_raycaster(Raycaster *rc){
     r =  malloc(sizeof(struct raycaster));
 
     // Initial Values
+    r->mv_speed = 599 / 10000.0;
+    r->rot_speed = 3745 / 100000.0;
+
     r->player_pos_x = INIT_P_POS_X;
     r->player_pos_y = INIT_P_POS_Y;
     r->player_dir_x = INIT_P_DIR_X;
@@ -579,6 +584,21 @@ void draw_screens(Game *game, int screen_number, double shade, double red_shade)
                                 pixel += 3;
                             }
                         }
+                    }else{
+                        if(screen_number == 7){
+                            for(int y = 0; y < BUFFER_HEIGHT; y++){
+                                for(int x = 0; x < BUFFER_WIDTH; x++){
+                                    r = run_screen[pixel + 0]*shade;
+                                    g = run_screen[pixel + 1]*shade;
+                                    b = run_screen[pixel + 2]*shade;
+
+                                    SDL_SetRenderDrawColor((*game)->renderer, r, g, b, SDL_ALPHA_OPAQUE);
+                                    SDL_RenderDrawPoint((*game)->renderer, x, y);
+
+                                    pixel += 3;
+                                }
+                            }
+                        }
                     }
                 }
             }  
@@ -604,10 +624,10 @@ int handle_event(Raycaster *rc, Game *game, bool *playing, int *channel){
             x = (int)((*rc)->player_pos_x);
             y = (int)((*rc)->player_pos_y);
 
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) <= 0)
-                (*rc)->player_pos_x += (*rc)->player_dir_x * MV_SPEED;
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) <= 0)
-                (*rc)->player_pos_y += (*rc)->player_dir_y * MV_SPEED;
+            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * (*rc)->mv_speed),(int)((*rc)->player_pos_y)) <= 0)
+                (*rc)->player_pos_x += (*rc)->player_dir_x * (*rc)->mv_speed;
+            if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * (*rc)->mv_speed)) <= 0)
+                (*rc)->player_pos_y += (*rc)->player_dir_y * (*rc)->mv_speed;
 
             //Enqueue
             if (x != (int)((*rc)->player_pos_x) || y != (int)((*rc)->player_pos_y)){
@@ -617,37 +637,37 @@ int handle_event(Raycaster *rc, Game *game, bool *playing, int *channel){
         }
 
         if (get_s((*game)->keys)){
-            if (on_map((*game)->map,(int)((*rc)->player_pos_x - (*rc)->player_dir_x * MV_SPEED), (int)((*rc)->player_pos_y)) <= 0)
-                (*rc)->player_pos_x -= (*rc)->player_dir_x * MV_SPEED;
-            if (on_map((*game)->map,(int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y - (*rc)->player_dir_y * MV_SPEED)) <= 0)
-                (*rc)->player_pos_y -= (*rc)->player_dir_y * MV_SPEED;
+            if (on_map((*game)->map,(int)((*rc)->player_pos_x - (*rc)->player_dir_x * (*rc)->mv_speed), (int)((*rc)->player_pos_y)) <= 0)
+                (*rc)->player_pos_x -= (*rc)->player_dir_x * (*rc)->mv_speed;
+            if (on_map((*game)->map,(int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y - (*rc)->player_dir_y * (*rc)->mv_speed)) <= 0)
+                (*rc)->player_pos_y -= (*rc)->player_dir_y * (*rc)->mv_speed;
         }
 
         if (get_d((*game)->keys)){
             oldDirX = (*rc)->player_dir_x;
-            (*rc)->player_dir_x = (*rc)->player_dir_x * cos(-ROT_SPEED) - (*rc)->player_dir_y * sin(-ROT_SPEED);
-            (*rc)->player_dir_y = oldDirX * sin(-ROT_SPEED) + (*rc)->player_dir_y * cos(-ROT_SPEED);
+            (*rc)->player_dir_x = (*rc)->player_dir_x * cos(-(*rc)->rot_speed) - (*rc)->player_dir_y * sin(-(*rc)->rot_speed);
+            (*rc)->player_dir_y = oldDirX * sin(-(*rc)->rot_speed) + (*rc)->player_dir_y * cos(-(*rc)->rot_speed);
             oldPlaneX = (*rc)->player_plane_x;
-            (*rc)->player_plane_x = (*rc)->player_plane_x * cos(-ROT_SPEED) - (*rc)->player_plane_y * sin(-ROT_SPEED);
-            (*rc)->player_plane_y = oldPlaneX * sin(-ROT_SPEED) + (*rc)->player_plane_y * cos(-ROT_SPEED);
+            (*rc)->player_plane_x = (*rc)->player_plane_x * cos(-(*rc)->rot_speed) - (*rc)->player_plane_y * sin(-(*rc)->rot_speed);
+            (*rc)->player_plane_y = oldPlaneX * sin(-(*rc)->rot_speed) + (*rc)->player_plane_y * cos(-(*rc)->rot_speed);
         }
 
         if (get_a((*game)->keys)){
             oldDirX = (*rc)->player_dir_x;
-            (*rc)->player_dir_x = (*rc)->player_dir_x * cos(ROT_SPEED) - (*rc)->player_dir_y * sin(ROT_SPEED);
-            (*rc)->player_dir_y = oldDirX * sin(ROT_SPEED) + (*rc)->player_dir_y * cos(ROT_SPEED);
+            (*rc)->player_dir_x = (*rc)->player_dir_x * cos((*rc)->rot_speed) - (*rc)->player_dir_y * sin((*rc)->rot_speed);
+            (*rc)->player_dir_y = oldDirX * sin((*rc)->rot_speed) + (*rc)->player_dir_y * cos((*rc)->rot_speed);
             oldPlaneX = (*rc)->player_plane_x;
-            (*rc)->player_plane_x = (*rc)->player_plane_x * cos(ROT_SPEED) - (*rc)->player_plane_y * sin(ROT_SPEED);
-            (*rc)->player_plane_y = oldPlaneX * sin(ROT_SPEED) + (*rc)->player_plane_y * cos(ROT_SPEED);
+            (*rc)->player_plane_x = (*rc)->player_plane_x * cos((*rc)->rot_speed) - (*rc)->player_plane_y * sin((*rc)->rot_speed);
+            (*rc)->player_plane_y = oldPlaneX * sin((*rc)->rot_speed) + (*rc)->player_plane_y * cos((*rc)->rot_speed);
         }
 
         //Get item event
-        if (on_map((*game)->map, (int)( (*rc)->player_pos_x + ( (*rc)->player_dir_x ) * MV_SPEED ), (int)( (*rc)->player_pos_y)) == 9){               
+        if (on_map((*game)->map, (int)( (*rc)->player_pos_x + ( (*rc)->player_dir_x ) * (*rc)->mv_speed ), (int)( (*rc)->player_pos_y)) == 9){               
             play_chunk((*game)->pick_up_keys);
             get_item((*game)->player);
             clear_item((*game)->map);
         }
-        if (on_map((*game)->map, (int)( (*rc)->player_pos_x ), (int)( (*rc)->player_pos_y + ( (*rc)->player_dir_y ) * MV_SPEED )) == 9){
+        if (on_map((*game)->map, (int)( (*rc)->player_pos_x ), (int)( (*rc)->player_pos_y + ( (*rc)->player_dir_y ) * (*rc)->mv_speed )) == 9){
             play_chunk((*game)->pick_up_keys);
             get_item((*game)->player);
             clear_item((*game)->map);
@@ -655,10 +675,10 @@ int handle_event(Raycaster *rc, Game *game, bool *playing, int *channel){
 
         //Change map event
         if(get_e((*game)->keys)){
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)) != 0)
-                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * MV_SPEED),(int)((*rc)->player_pos_y)), playing, channel);
-            if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)) != 0)
-                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * MV_SPEED)), playing, channel);
+            if (on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * (*rc)->mv_speed),(int)((*rc)->player_pos_y)) != 0)
+                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x + (*rc)->player_dir_x * (*rc)->mv_speed),(int)((*rc)->player_pos_y)), playing, channel);
+            if (on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * (*rc)->mv_speed)) != 0)
+                change_map_event(game, on_map((*game)->map, (int)((*rc)->player_pos_x), (int)((*rc)->player_pos_y + (*rc)->player_dir_y * (*rc)->mv_speed)), playing, channel);
         }
 
         //Pause game
@@ -676,7 +696,7 @@ int handle_event(Raycaster *rc, Game *game, bool *playing, int *channel){
                     change_state(game, 1);
                 }
                 if (read_keys(&(*game)->keys) != 0)
-                    (*game)->quit = true; 
+                    (*game)->quit = true;
             }
         }
     }
@@ -780,9 +800,9 @@ void change_map_event(Game *game, int door, bool *playing, int *channel){
     case 51:
         if(get_qtd_keys((*game)->player) >= 4){
             play_chunk((*game)->openning_door);
-            changing_map(game, main_room, 15, 11);
-            update_actual_room((*game)->map, 1);
-            m_jump((*game)->queue, (*game)->monster, (*game)->player, JUMP);
+            change_state(game, 6);
+            Mix_PauseMusic();
+            play_music((*game)->running_soundtrack);
         }
         break;  
     case 16:
@@ -824,11 +844,13 @@ void render_loop(Raycaster *rc, Game *game){
 
     //Timer
     int timer = 0;
+    int timer_run = 0;
     int timer_breathing = 0;
 
     //Shade
     double shade = 0;
     double red_shade = 0;
+    int decreasing_shade = 0;
 
     //Dead
     int red = 0;
@@ -842,6 +864,8 @@ void render_loop(Raycaster *rc, Game *game){
 
     bool playing_closed_door = false;
     int channel_closed_door = 0;
+
+    play_music((*game)->sound_track);
 
     //Control steps
     int move_time = 60;
@@ -861,38 +885,83 @@ void render_loop(Raycaster *rc, Game *game){
                 draw_texture(rc, x, (*game)->renderer, (*game)->map, red);
             }
 
+            if(get_actual_room((*game)->map) == 6){
+                move_time = 30;
+
+                //Monster events
+                if(timer >= move_time){
+                    m_chasing((*game)->queue, (*game)->monster, (*game)->player, (*game)->monster_walking);
+                    timer = 0;
+                }
+
+                //Control Audio flag
+                if(Mix_Playing(channel_heavy_breathing) == 0){
+                    playing_heavy_breathing = false;
+                }
+
+                //Final room
+                if(is_walking((*game)->monster)){
+                    if(!playing_heavy_breathing){
+                        channel_heavy_breathing = play_chunk((*game)->heavy_breathing);
+                        playing_heavy_breathing = true;
+                    }
+                }
+
+                if(red >= 70 || decreasing_shade == 1){
+                    red -= 1;
+                    decreasing_shade = 1;
+                    if(red <= 0){ decreasing_shade = 0;}
+                    printf("Decreasin\n");
+                }else{
+                    if(red <= 0 || decreasing_shade == 0){
+                        red += 1;
+                        decreasing_shade = 0;
+                        printf("increasing\n");
+                    }
+                }
+
+                if(red >= 70){
+                    red = 70;
+                }
+
+                if(red <= 0){
+                    red = 0;
+                }
+            }
+
             show_keys((*game)->font, (*game)->renderer, (*game)->player);
             handle_event(rc, game, &playing_closed_door, &channel_closed_door);
 
-            if(get_size((*game)->queue) < 5){
-                move_time = 30;
-            }
+            if(get_actual_room((*game)->map) != 6){
+                if(get_size((*game)->queue) < 5){
+                    move_time = 30;
+                }
 
-            if(get_size((*game)->queue) >= 5 && get_size((*game)->queue) < 8 ){
-                move_time = 45;
-            }
+                if(get_size((*game)->queue) >= 5 && get_size((*game)->queue) < 8 ){
+                    move_time = 45;
+                }
 
-            if(get_size((*game)->queue) >= 8){
-                move_time = 60;
-            }
+                if(get_size((*game)->queue) >= 8){
+                    move_time = 60;
+                }
 
-            //Monster events
-            if(timer >= move_time){
-                m_chasing((*game)->queue, (*game)->monster, (*game)->player, (*game)->monster_walking);
-                timer = 0;
-            }
+                //Monster events
+                if(timer >= move_time){
+                    m_chasing((*game)->queue, (*game)->monster, (*game)->player, (*game)->monster_walking);
+                    timer = 0;
+                }
 
+                //Control Audio flag
+                if(Mix_Playing(channel_heavy_breathing) == 0){
+                    playing_heavy_breathing = false;
+                }
 
-            //Control Audio flag
-            if(Mix_Playing(channel_heavy_breathing) == 0){
-                playing_heavy_breathing = false;
-            }
-
-            //Monster is close
-            if(is_walking((*game)->monster)){
-                if(get_size((*game)->queue) == 4 && !playing_heavy_breathing){
-                    channel_heavy_breathing = play_chunk((*game)->heavy_breathing);
-                    playing_heavy_breathing = true;
+                //Monster is close
+                if(is_walking((*game)->monster)){
+                    if(get_size((*game)->queue) == 4 && !playing_heavy_breathing){
+                        channel_heavy_breathing = play_chunk((*game)->heavy_breathing);
+                        playing_heavy_breathing = true;
+                    }
                 }
             }
 
@@ -950,6 +1019,39 @@ void render_loop(Raycaster *rc, Game *game){
                     }
                     if(get_esc((*game)->keys)){
                         (*game)->quit = true;
+                    }
+                }else{
+                    if(get_state(game) == 6){
+                        if(shade > 1){ shade = 1;}
+                        draw_screens(game, 7, shade, red_shade);
+
+                        timer_run += 1;
+
+                        if((shade >= 1 && timer_run >= 300) || decreasing_shade == 1){
+                            shade -= 0.005;
+                            decreasing_shade = 1;
+                        }else{
+                            shade += 0.005;
+                        }
+
+                        if(shade <= 0){ shade = 0; }
+
+                        if(timer_run >= 500){
+                            change_state(game, 2);
+                            changing_map(game, last_room, 22, 12);
+                            update_actual_room((*game)->map, 6);
+
+                            (*game)->raycaster->player_dir_x = INIT_P_DIR_X;
+                            (*game)->raycaster->player_dir_y = INIT_P_DIR_Y;
+                            (*game)->raycaster->player_plane_x = INIT_P_PLANE_X;
+                            (*game)->raycaster->player_plane_y = INIT_P_PLANE_Y;
+
+                            (*game)->raycaster->mv_speed = 279 / 10000.0;
+                            (*game)->raycaster->rot_speed = 2745 / 100000.0;
+
+                            shade = 0;
+                            decreasing_shade = 0;
+                        }
                     }
                 }
             }

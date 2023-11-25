@@ -54,6 +54,7 @@ extern int escaped[];
 extern int floor_ceiling[];
 extern int pause_screen[];
 extern int press[];
+extern int run_screen[];
 
 // Inicial values
 #define INIT_P_POS_X 22
@@ -62,8 +63,8 @@ extern int press[];
 #define INIT_P_DIR_Y 0
 #define INIT_P_PLANE_X 0
 #define INIT_P_PLANE_Y 0.66
-#define MV_SPEED 599 / 10000.0
-#define ROT_SPEED 3745 / 100000.0
+/* #define MV_SPEED 599 / 10000.0
+#define ROT_SPEED 3745 / 100000.0 */
 #define AMB_LIGHT 7
 
 typedef struct raycaster* Raycaster;

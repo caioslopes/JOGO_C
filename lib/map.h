@@ -12,6 +12,7 @@ extern int second_room[MAPWIDTH][MAPHEIGHT];
 extern int third_room[MAPWIDTH][MAPHEIGHT];
 extern int fourth_room[MAPWIDTH][MAPHEIGHT];
 extern int fifth_room[MAPWIDTH][MAPHEIGHT];
+extern int last_room[MAPWIDTH][MAPHEIGHT];
 
 typedef struct map* Map;
 
