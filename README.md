@@ -1,34 +1,25 @@
 # Não olhe para trás
 
-É um jogo 2D que está sendo desenvolvido com a técnica "Raycaster" - técnica essa usada em jogos como: DOOM e Wolfenstein 3D - em C e a biblioteca SDL2.
+Seja bem-vindo ao repositório de Não Olhe para Trás, um jogo de terror e suspense desenvolvido pelos alunos do Instituto Federal, Campus Araraquara. Aqui, você encontrará o código-fonte do projeto, documentações e detalhes relacionados à construção do jogo.
 
-- Projeto em desenvolvimento
-- README em desenvolvimento
+![](https://i.imgur.com/GneGxzD.png)
+
 
 ## Introdução
-O projeto é um trabalho (desafio) passado pelo professor Ednilson Geraldo Rossi - Estrutura de Dados - no qual o objetivo é desenvolver um jogo utilizando estrutura de dados como: Pilha, Fila ou Lista.
 
-O projeto é de autoria do grupo, sendo inspirado em jogos antigos.
+Em Não Olhe para Trás, apresentamos a temática de um hotel abandonado em um jogo com um aspecto antigo, desenvolvido para provocar medo e ansiedade nos jogadores por meio de diversos elementos sonoros. O jogador explora o mapa em busca da chave que abrirá a porta final.
 
-## O Jogo
-Baseado nos backrooms, Não olhe para trás, traz um pedaço desse universo creepy através de uma experiencia imersiva de terror psicologico, no qual é trabalhado o medo através dos sons.
+Esse projeto foi proposto pelo professor Ednilson Rossi, responsável pela disciplina Estrutura de Dados (ESDD). Como requisitos para este trabalho, foram estabelecidos dois pontos: o uso exclusivo da linguagem C na construção do jogo e a implementação de uma das estruturas de dados abordadas em aula na lógica principal do jogo.
 
-A experiência é baseada num pseudo-monstro que te persegue durante todo o jogo e seu objetivo é escapar do saguão principal procurando a chave que abre a saída.
+## Construção
+Em busca de cumprir os requisitos do trabalho, utilizamos a lógica de FIFO (First In, First Out) na representação de um monstro. Como isso funciona?
 
-Mapa do jogo - 12/11/2023
-![](https://i.imgur.com/sxEO56a.png)
+Os movimentos realizados pelo jogador no mapa preenchem a fila de posições, e, quando esta se encontra completa, iniciamos o monstro. Trata-se de um algoritmo que, ao ser iniciado, realiza uma diminuição contínua dessa fila.
 
-Gif Estágio grafico - 12/11/2023
-![](https://i.imgur.com/HxThV9w.gif)
 
-## Estrutura e Estratégia
-- Monstro
-- Mapa
-- Player
-- Sons
-- Texturas
 
-## Instalação
+## Como jogar
+
 
 ## Metodologia de desenvolvimento
 
