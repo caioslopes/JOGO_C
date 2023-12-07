@@ -16,21 +16,28 @@ Em busca de cumprir os requisitos do trabalho, utilizamos a lógica de FIFO (Fir
 
 Os movimentos realizados pelo jogador no mapa preenchem a fila de posições, e, quando esta se encontra completa, iniciamos o monstro. Trata-se de um algoritmo que, ao ser iniciado, realiza uma diminuição contínua dessa fila.
 
-
-
 ## Como jogar
+
+### Linux
+
+Antes de compilar o projeto,instale as dependencias usando o comando abaixo:
+
+```bash
+  make linux-libs
+```
 
 
 ## Metodologia de desenvolvimento
 
-## Video explicando o projeto
+## Videos explicativos
+
+- [Lógica do projeto](https://www.youtube.com/watch?v=rhTQ_YKvdUI&ab_channel=AugustoSerrano)
+- [GamePlay](https://www.youtube.com/watch?v=kMrowFIeegs&ab_channel=AugustoSerrano)
 
 ## Autores
-- Augusto Grandini Serrano
-   gutsserrano@gmail.com
+- [Augusto Grandini Serrano](mailto:gutsserrano@gmail.com)
 
-- Caio dos Santos Lopes
-  caiolopes.social@gmail.com
+- [Caio dos Santos Lopes](mailto:caiolopes.social@gmail.com) 
 
-- Eduardo Pires Carvalho
-  epc4129@gmail.com
+- [Eduardo Pires Carvalho](mailto:epc4129@gmail.com)
+  
