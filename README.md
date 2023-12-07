@@ -30,8 +30,6 @@ Clone ou baixe nosso repositõrio e siga as intruções abaixo de acordo com seu
 
 
 
-
-
 #### Linux
 Execute o comando a seguir para instalar as dependências do projeto:
 
@@ -75,10 +73,8 @@ Em nosso caso, optamos pelo aplicativo Trello, que nos oferece um Kanban para or
 
 ## Videos explicativos
 
-<video width="1080" height="720" controls>
-  <source src="https://i.imgur.com/6GHJ0Q3.mp4" type="video/mp4">
-</video>
 
+  ![](https://i.imgur.com/27Zbyvz.gif)
 - [Lógica do projeto](https://www.youtube.com/watch?v=rhTQ_YKvdUI&ab_channel=AugustoSerrano)
 - [GamePlay](https://www.youtube.com/watch?v=kMrowFIeegs&ab_channel=AugustoSerrano)
 
