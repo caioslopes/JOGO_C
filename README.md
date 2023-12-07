@@ -56,6 +56,12 @@ Com as devidas bibliotecas instaladas, execute o comando a seguir para gerar um 
   make windows
   ```
 
+## Screenshots
+
+![](https://i.imgur.com/qD4BTca.png)
+
+![](https://i.imgur.com/NziqAJr.png)
+
 ## Metodologia de desenvolvimento
 
 Na construção deste projeto, utilizamos um método organizacional chamado Kanban para nos organizar. Com esse método, conseguimos estruturar e distribuir todas as tarefas relacionadas à construção do jogo.
