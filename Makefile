@@ -54,6 +54,9 @@ macos	: 	$(SRC)
 
 linux	: 	$(OBJ)
 			$(CC) -o $(NAME) $(OBJ) $(LDLIBS)
+
+linux-libs:
+			sudo apt-get install libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev
 			
 # Put "mingw32-make windows" in terminal
 windows :   	
