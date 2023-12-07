@@ -3,7 +3,7 @@
 
 Seja bem-vindo ao repositório de Não Olhe para Trás, um jogo de terror e suspense desenvolvido pelos alunos do Instituto Federal, Campus Araraquara. Aqui, você encontrará o código-fonte do projeto, documentações e detalhes relacionados à construção do jogo.
 
-![](https://i.imgur.com/GneGxzD.png)
+![](https://i.imgur.com/8VhZT0o_d.webp?maxwidth=760&fidelity=grand)
 
 
 ## Introdução
@@ -57,6 +57,9 @@ Com as devidas bibliotecas instaladas, execute o comando a seguir para gerar um 
   ```
 
 ## Screenshots
+![](https://i.imgur.com/z6Ui7bN.png)
+
+![](https://i.imgur.com/mIWHUc3.png)
 
 ![](https://i.imgur.com/qD4BTca.png)
 
@@ -68,17 +71,21 @@ Na construção deste projeto, utilizamos um método organizacional chamado Kanb
 
 Em nosso caso, optamos pelo aplicativo Trello, que nos oferece um Kanban para organizar cards utilizados para descrever as tarefas do jogo.
 
-![](https://i.imgur.com/B19eqMV_d.webp?maxwidth=760&fidelity=grand)
+![](https://i.imgur.com/8CI7wJK_d.webp?maxwidth=760&fidelity=grand)
 
 ## Videos explicativos
+
+<video width="1080" height="720" controls>
+  <source src="https://i.imgur.com/6GHJ0Q3.mp4" type="video/mp4">
+</video>
 
 - [Lógica do projeto](https://www.youtube.com/watch?v=rhTQ_YKvdUI&ab_channel=AugustoSerrano)
 - [GamePlay](https://www.youtube.com/watch?v=kMrowFIeegs&ab_channel=AugustoSerrano)
 
 ## Autores
-- [Augusto Grandini Serrano](mailto:gutsserrano@gmail.com)
+- [Augusto Grandini Serrano](@gutsserrano) - [gutsserrano@gmail.com](mailto:gutsserrano@gmail.com)
 
-- [Caio dos Santos Lopes](mailto:caiolopes.social@gmail.com) 
+- [Caio dos Santos Lopes](@caioslopes) - [caiolopes.social@gmail.com](mailto:caiolopes.social@gmail.com) 
 
-- [Eduardo Pires Carvalho](mailto:epc4129@gmail.com)
+- [Eduardo Pires Carvalho](@EduardoPC05) - [epc4129@gmail.com](mailto:epc4129@gmail.com)
   
